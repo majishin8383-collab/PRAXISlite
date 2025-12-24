@@ -40,6 +40,10 @@
   </div>
 
   <!-- JS -->
-  <script type="module" src="./js/app.js"></script>
+<script type="module">
+  const v = Date.now();
+  import(`./js/app.js?v=${v}`);
+</script>
+
 </body>
 </html>
