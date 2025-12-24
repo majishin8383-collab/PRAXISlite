@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#0b0f14" />
   <title>Praxis</title>
-  <link rel="stylesheet" href="./styles.css?v=2025-12-24-01" />
+
+  <!-- IMPORTANT: correct stylesheet path -->
+  <link rel="stylesheet" href="./styles/base.css?v=2025-12-24-01" />
 </head>
 <body>
   <header class="topbar">
@@ -18,23 +20,12 @@
     </div>
 
     <nav class="tabs" aria-label="Primary">
-      <button class="tab" data-route="home" id="tab-home">Home</button>
-      <button class="tab" data-route="step1" id="tab-step1">Reset</button>
-      <button class="tab" data-route="step2" id="tab-step2">Calm</button>
-      <button class="tab" data-route="step3" id="tab-step3">Stop Urge</button>
-      <button class="tab" data-route="step4" id="tab-step4">Move Forward</button>
+      <button class="tab" data-route="home">Home</button>
+      <button class="tab" data-route="step1">Reset</button>
+      <button class="tab" data-route="step2">Calm</button>
+      <button class="tab" data-route="step3">Stop Urge</button>
+      <button class="tab" data-route="step4">Move Forward</button>
     </nav>
   </header>
 
-  <main class="wrap" id="app" aria-live="polite"></main>
-
-  <footer class="footer">
-    <div class="footerInner">
-      <button class="ghost" id="btn-export" type="button">Export Log</button>
-      <button class="ghost" id="btn-clear" type="button">Clear Data</button>
-    </div>
-  </footer>
-
-  <script defer src="./app.js?v=2025-12-24-01"></script>
-</body>
-</html>
+  <main class="wrap" id="app"
