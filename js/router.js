@@ -1,6 +1,7 @@
 import { setMain, renderHome } from "./ui.js";
 
 import { renderFocusSprint } from "./zones/green/focusSprint.js";
+import { renderTodayPlan } from "./zones/green/todayPlan.js";
 import { renderCalm } from "./zones/yellow/calm.js";
 import { renderNoContact } from "./zones/yellow/noContactShield.js";
 import { renderEmergency } from "./zones/red/emergency.js";
@@ -8,6 +9,7 @@ import { renderEmergency } from "./zones/red/emergency.js";
 const routes = new Map([
   ["#/home", () => renderHome()],
   ["#/green/focus", () => renderFocusSprint()],
+  ["#/green/today", () => renderTodayPlan()],
   ["#/yellow/calm", () => renderCalm()],
   ["#/yellow/nocontact", () => renderNoContact()],
   ["#/red/emergency", () => renderEmergency()],
