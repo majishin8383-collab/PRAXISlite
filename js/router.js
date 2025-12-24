@@ -8,7 +8,7 @@ import { renderStopUrge } from "./zones/yellow/stopUrge.js";
 
 import { renderEmergency } from "./zones/red/emergency.js";
 
-// Reset/Home is #/home. No No-Contact route exists.
+// Reset = Home
 const routes = new Map([
   ["#/home", () => renderHome()],
   ["#/green/focus", () => renderFocusSprint()],
