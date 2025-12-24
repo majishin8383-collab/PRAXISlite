@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Praxis</title>
 
-  <!-- CSS -->
   <link rel="stylesheet" href="./styles/base.css" />
   <link rel="stylesheet" href="./styles/components.css" />
   <link rel="stylesheet" href="./styles/home.css" />
@@ -27,9 +26,7 @@
       </nav>
     </header>
 
-    <main id="main" class="main" role="main" aria-live="polite">
-      <!-- JS will render content here -->
-    </main>
+    <main id="main" class="main" role="main" aria-live="polite"></main>
 
     <footer class="footer">
       <div class="footerNote">
@@ -39,8 +36,49 @@
 
   </div>
 
-  <!-- JS -->
-  <script type="module" src="./js/app.js"></script>
+  <!-- On-screen error reporter + safe loader (mobile-friendly) -->
+  <script>
+    (function () {
+      const main = document.getElementById("main");
+
+      function showError(title, msg) {
+        if (!main) return;
+        main.innerHTML = `
+          <div style="padding:16px;border:1px solid rgba(255,0,0,.35);border-radius:14px;background:rgba(255,0,0,.08)">
+            <div style="font-weight:900;margin-bottom:6px">${title}</div>
+            <div style="font-family:monospace;white-space:pre-wrap">${msg}</div>
+          </div>
+        `;
+      }
+
+      window.addEventListener("error", (e) => {
+        showError("Praxis Error", e.message || "Unknown error");
+      });
+
+      window.addEventListener("unhandledrejection", (e) => {
+        const msg = (e.reason && e.reason.message) ? e.reason.message : String(e.reason);
+        showError("Praxis Error", msg);
+      });
+
+      // Load the app as a module and catch failures (missing file, bad import, syntax error, etc.)
+      (async () => {
+        try {
+          await import("./js/app.js");
+
+          // If app loads but never renders, show a hint
+          setTimeout(() => {
+            if (main && main.children.length === 0) {
+              showError(
+                "Praxis Loaded, but nothing rendered",
+                "This usually means a router/render function didn’t run or an early error stopped rendering."
+              );
+            }
+          }, 1200);
+        } catch (err) {
+          showError("Failed to load ./js/app.js", (err && err.message) ? err.message : String(err));
+        }
+      })();
+    })();
+  </script>
 </body>
 </html>
-
