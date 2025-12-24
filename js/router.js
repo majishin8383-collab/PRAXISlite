@@ -1,31 +1,21 @@
 import { setMain, renderHome } from "./ui.js";
 
-// Existing working flows (these should exist)
 import { renderFocusSprint } from "./zones/green/focusSprint.js";
-import { renderTodayPlan } from "./zones/green/todayPlan.js";
+import { renderMoveForward } from "./zones/green/moveForward.js";
+
 import { renderCalm } from "./zones/yellow/calm.js";
-import { renderNoContact } from "./zones/yellow/noContactShield.js";
+import { renderStopUrge } from "./zones/yellow/stopUrge.js";
+
 import { renderEmergency } from "./zones/red/emergency.js";
-import { renderReflect } from "./zones/reflect.js";
 
-// Temporary bridges so new Reset tiles never dead-end
-function renderMoveForwardBridge() { return renderFocusSprint(); }
-function renderDirectionBridge() { return renderTodayPlan(); }
-function renderNextStepBridge() { return renderHome(); }
-
+// Reset = Home. No “No Contact” route exists.
 const routes = new Map([
   ["#/home", () => renderHome()],
-
   ["#/green/focus", () => renderFocusSprint()],
-  ["#/green/today", () => renderTodayPlan()],
+  ["#/green/move", () => renderMoveForward()],
   ["#/yellow/calm", () => renderCalm()],
-  ["#/yellow/nocontact", () => renderNoContact()],
+  ["#/yellow/urge", () => renderStopUrge()],
   ["#/red/emergency", () => renderEmergency()],
-  ["#/reflect", () => renderReflect()],
-
-  ["#/green/move", () => renderMoveForwardBridge()],
-  ["#/green/direction", () => renderDirectionBridge()],
-  ["#/green/next", () => renderNextStepBridge()],
 ]);
 
 function getRoute() {
