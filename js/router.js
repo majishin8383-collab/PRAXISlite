@@ -5,6 +5,7 @@ import { renderTodayPlan } from "./zones/green/todayPlan.js";
 import { renderCalm } from "./zones/yellow/calm.js";
 import { renderNoContact } from "./zones/yellow/noContactShield.js";
 import { renderEmergency } from "./zones/red/emergency.js";
+import { renderReflect } from "./zones/reflect.js";
 
 const routes = new Map([
   ["#/home", () => renderHome()],
@@ -13,6 +14,7 @@ const routes = new Map([
   ["#/yellow/calm", () => renderCalm()],
   ["#/yellow/nocontact", () => renderNoContact()],
   ["#/red/emergency", () => renderEmergency()],
+  ["#/reflect", () => renderReflect()],
 ]);
 
 function getRoute() {
