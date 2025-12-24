@@ -5,22 +5,30 @@ export function renderCalm() {
   block.className = "block";
   block.innerHTML = `
     <h3>Calm Me Down</h3>
-    <p>Reduce intensity. Regain choice.</p>
+    <p>Slow the body. Reduce intensity. Nothing else matters right now.</p>
+
     <div class="hr"></div>
+
     <ul class="list">
-      <li class="item"><strong>Round 1</strong><span>In 4 / Out 6</span></li>
-      <li class="item"><strong>Round 2</strong><span>In 4 / Out 7</span></li>
-      <li class="item"><strong>Round 3</strong><span>In 4 / Out 8</span></li>
+      <li class="item">
+        <strong>Breathing</strong>
+        <span>Inhale 4 seconds · Exhale 6 seconds (5 rounds)</span>
+      </li>
+      <li class="item">
+        <strong>Posture</strong>
+        <span>Drop your shoulders. Unclench your jaw.</span>
+      </li>
+      <li class="item">
+        <strong>Orientation</strong>
+        <span>Name 3 things you can see. Feel your feet.</span>
+      </li>
     </ul>
-    <div class="hr"></div>
-    <label>Where is it strongest?</label>
-    <input class="input" placeholder="e.g., chest, jaw, stomach" />
   `;
 
   return renderSimpleFlow(
     "Calm Me Down",
-    "Reduce intensity. Regain choice.",
-    "Calm engaged",
+    "Lower the intensity so you can choose your next move.",
+    "Calming",
     block,
     "Continue",
     "#/yellow/urge"
