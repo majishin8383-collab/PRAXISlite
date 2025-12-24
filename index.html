@@ -2,491 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="theme-color" content="#0b0f14" />
-  <title>PRAXIS Lite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PRAXIS</title>
 
-  <style>
-    :root{
-      --bg:#0b0f14;
-      --panel:#121825;
-      --panel2:#0f1420;
-      --text:#e9eef7;
-      --muted:#aab6cc;
-      --line:rgba(255,255,255,.08);
-      --accent:#7dd3fc;
-      --accent2:#60a5fa;
-      --shadow:0 14px 50px rgba(0,0,0,.45);
-      --r:18px;
-      --r2:14px;
-      --w:980px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-    }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:var(--sans);
-      color:var(--text);
-      background:
-        radial-gradient(900px 500px at 15% 10%, rgba(96,165,250,.18), transparent 60%),
-        radial-gradient(800px 520px at 85% 0%, rgba(125,211,252,.12), transparent 55%),
-        radial-gradient(900px 700px at 55% 100%, rgba(34,197,94,.10), transparent 60%),
-        var(--bg);
-    }
-
-    .wrap{max-width:var(--w); margin:0 auto; padding:18px 18px 38px;}
-    .top{display:flex; align-items:center; gap:12px; padding:16px 0 14px;}
-    .logo{
-      width:40px; height:40px; border-radius:14px;
-      display:grid; place-items:center;
-      font-weight:900;
-      background: linear-gradient(135deg, rgba(125,211,252,.25), rgba(96,165,250,.14));
-      border:1px solid rgba(125,211,252,.22);
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
-    .brandName{font-weight:900; letter-spacing:.2px}
-    .brandTag{color:var(--muted); font-size:13px; margin-top:2px}
-
-    /* Home */
-    .homeCard{
-      background: linear-gradient(180deg, rgba(18,24,37,.92), rgba(15,20,32,.92));
-      border:1px solid var(--line);
-      border-radius:var(--r);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-    }
-    .homeHead{padding:18px 18px 12px; border-bottom:1px solid var(--line);}
-    .h1{margin:0 0 6px; font-size:22px}
-    .sub{margin:0; color:var(--muted); line-height:1.35}
-
-    .btnGrid{
-      padding:16px 16px 18px;
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap:12px;
-    }
-    @media (min-width: 860px){ .btnGrid{grid-template-columns: repeat(3, 1fr);} }
-
-    .bigBtn{
-      padding:16px 14px;
-      border-radius:16px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      font-size:15px;
-      font-weight:900;
-      cursor:pointer;
-      text-align:left;
-      box-shadow: 0 10px 24px rgba(0,0,0,.25);
-    }
-    .bigBtn:hover{border-color: rgba(125,211,252,.35);}
-    .bigBtn .hint{
-      display:block;
-      margin-top:6px;
-      color:var(--muted);
-      font-weight:700;
-      font-size:13px;
-      line-height:1.25;
-    }
-    .bigBtn.primary{
-      border-color: rgba(125,211,252,.45);
-      background: linear-gradient(135deg, rgba(125,211,252,.26), rgba(96,165,250,.14));
-    }
-
-    /* Module card */
-    .card{
-      background: linear-gradient(180deg, rgba(18,24,37,.92), rgba(15,20,32,.92));
-      border:1px solid var(--line);
-      border-radius:var(--r);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      margin-top:12px;
-    }
-    .cardHead{padding:18px 18px 10px; border-bottom:1px solid var(--line);}
-    .cardBody{padding:16px 18px 10px;}
-    .cardFoot{
-      display:flex; justify-content:space-between; align-items:center;
-      padding:12px 14px;
-      border-top:1px solid var(--line);
-      background: rgba(0,0,0,.12);
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .pill{
-      display:inline-flex; align-items:center;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      color:var(--muted);
-      font-size:13px;
-    }
-
-    .btn{
-      border-radius:12px;
-      padding:10px 12px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      color:var(--text);
-      cursor:pointer;
-      font-weight:800;
-    }
-    .btn:hover{border-color: rgba(125,211,252,.25);}
-    .btn.primary{
-      border-color: rgba(125,211,252,.35);
-      background: linear-gradient(135deg, rgba(125,211,252,.20), rgba(96,165,250,.10));
-    }
-    .btn.ghost{background: transparent; color: var(--muted);}
-
-    /* Content bits */
-    .block{
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      border-radius:var(--r2);
-      padding:14px;
-      margin:10px 0 0;
-    }
-    .block h3{margin:0 0 6px; font-size:15px}
-    .block p{margin:0; color:var(--muted); line-height:1.45; font-size:14px}
-    .hr{height:1px; background:var(--line); margin:14px 0}
-    .list{list-style:none; padding:0; margin:10px 0 0; display:flex; flex-direction:column; gap:8px;}
-    .item{padding:12px; border-radius:14px; border:1px solid var(--line); background: rgba(0,0,0,.10); color:var(--text)}
-    .item span{color:var(--muted); display:block; margin-top:4px; font-size:13px; line-height:1.3}
-
-    .grid{display:grid; grid-template-columns:repeat(12,1fr); gap:12px; margin-top:12px;}
-    .col-6{grid-column:span 6}
-    .col-12{grid-column:span 12}
-    @media(max-width:760px){.col-6{grid-column:span 12}}
-
-    label{display:block; margin:0 0 6px; color:var(--muted); font-size:13px}
-    .input,.select,.textarea{
-      width:100%;
-      border:1px solid var(--line);
-      border-radius:12px;
-      padding:10px 12px;
-      background: rgba(0,0,0,.18);
-      color:var(--text);
-      outline:none;
-    }
-    .textarea{min-height:92px; resize:vertical;}
-
-    .footer{
-      max-width:var(--w);
-      margin:0 auto;
-      padding:18px 18px 24px;
-      color:rgba(170,182,204,.85);
-      font-size:13px;
-    }
-  </style>
+  <link rel="stylesheet" href="./styles/base.css" />
+  <link rel="stylesheet" href="./styles/components.css" />
+  <link rel="stylesheet" href="./styles/home.css" />
+  <link rel="stylesheet" href="./styles/flows.css" />
+  <link rel="stylesheet" href="./styles/redzone.css" />
 </head>
 
 <body>
-  <div class="wrap">
-    <div class="top">
-      <div class="logo">P</div>
-      <div>
-        <div class="brandName">PRAXIS Lite</div>
-        <div class="brandTag">Stabilize → Choose → Move Forward</div>
-      </div>
-    </div>
+  <div id="app" class="app">
 
-    <!-- HOME (6 buttons — locked) -->
-    <section id="home" class="homeCard" aria-label="Home">
-      <div class="homeHead">
-        <h1 class="h1">Choose your next tool</h1>
-        <p class="sub">Simple. Clear. Built for dysregulated moments.</p>
+    <header class="appHeader">
+      <div class="brand">
+        <div class="brandTitle">PRAXIS</div>
+        <div class="brandSub">Stabilize → Act → Move forward</div>
       </div>
 
-      <div class="btnGrid">
-        <button class="bigBtn primary" data-go="/reset">
-          Reset
-          <span class="hint">Interrupt the spiral fast.</span>
-        </button>
+      <nav class="topNav">
+        <button class="linkBtn" id="navHome" type="button">Home</button>
+      </nav>
+    </header>
 
-        <button class="bigBtn" data-go="/calm">
-          Calm Me Down
-          <span class="hint">Reduce intensity. Regain choice.</span>
-        </button>
+    <main id="main" class="main" role="main" aria-live="polite"></main>
 
-        <button class="bigBtn" data-go="/urge">
-          Stop the Urge
-          <span class="hint">Delay → distance → redirect.</span>
-        </button>
-
-        <button class="bigBtn" data-go="/move">
-          Move Forward
-          <span class="hint">One small action that improves today.</span>
-        </button>
-
-        <button class="bigBtn" data-go="/done">
-          Get Something Done
-          <span class="hint">Activate the body. Break the freeze.</span>
-        </button>
-
-        <button class="bigBtn" data-go="/next">
-          Find Your Next Step
-          <span class="hint">Clarity without overthinking.</span>
-        </button>
+    <footer class="footer">
+      <div class="footerNote">
+        You don’t have to figure everything out. Just take the next step.
       </div>
-    </section>
+    </footer>
 
-    <!-- MODULE VIEW -->
-    <section id="module" class="card" aria-label="Module" style="display:none;">
-      <div class="cardHead">
-        <h1 id="viewTitle" class="h1"></h1>
-        <p id="viewSubtitle" class="sub"></p>
-      </div>
-
-      <div id="viewBody" class="cardBody"></div>
-
-      <div class="cardFoot">
-        <span id="statusPill" class="pill">Ready</span>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button id="btnBack" class="btn ghost" type="button">Home</button>
-          <button id="btnPrimary" class="btn primary" type="button">Continue</button>
-        </div>
-      </div>
-    </section>
   </div>
 
-  <footer class="footer">
-    © <span id="year"></span> PRAXIS Lite. All rights reserved.
-  </footer>
-
+  <!-- On-screen error reporter + safe loader (mobile-friendly) -->
   <script>
-    (() => {
-      const $ = (s) => document.querySelector(s);
+    (function () {
+      const main = document.getElementById("main");
 
-      const home = $("#home");
-      const module = $("#module");
-      const viewTitle = $("#viewTitle");
-      const viewSubtitle = $("#viewSubtitle");
-      const viewBody = $("#viewBody");
-      const statusPill = $("#statusPill");
-      const btnPrimary = $("#btnPrimary");
-      const btnBack = $("#btnBack");
-
-      $("#year").textContent = String(new Date().getFullYear());
-
-      const routes = {
-        "/home": { home: true },
-
-        "/reset": {
-          title: "Reset",
-          subtitle: "Interrupt the spiral. Get back into your body.",
-          render: () => `
-            <div class="block">
-              <h3>30-second reset</h3>
-              <p>Exhale longer than you inhale. Shoulders down. Feet on the floor.</p>
-              <div class="hr"></div>
-              <ul class="list">
-                <li class="item"><strong>Step 1</strong><span>Look around. Name 5 things you see.</span></li>
-                <li class="item"><strong>Step 2</strong><span>Press your feet into the ground for 10 seconds.</span></li>
-                <li class="item"><strong>Step 3</strong><span>Slow exhale: 6 out / 4 in × 5.</span></li>
-              </ul>
-            </div>
-          `,
-          primary: { label: "Continue", next: "/calm" },
-          status: "Reset ready"
-        },
-
-        "/calm": {
-          title: "Calm Me Down",
-          subtitle: "Reduce intensity. Regain choice.",
-          render: () => `
-            <div class="grid">
-              <div class="col-6">
-                <div class="block">
-                  <h3>Breath ladder</h3>
-                  <p>3 rounds. Keep it gentle.</p>
-                  <div class="hr"></div>
-                  <ul class="list">
-                    <li class="item"><strong>Round 1</strong><span>In 4 / Out 6</span></li>
-                    <li class="item"><strong>Round 2</strong><span>In 4 / Out 7</span></li>
-                    <li class="item"><strong>Round 3</strong><span>In 4 / Out 8</span></li>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="col-6">
-                <div class="block">
-                  <h3>Body signal</h3>
-                  <p>Name where you feel it. This lowers fusion.</p>
-                  <div class="hr"></div>
-                  <label for="signal">Where is it strongest?</label>
-                  <input class="input" id="signal" placeholder="e.g., chest, jaw, stomach" />
-                </div>
-              </div>
-            </div>
-          `,
-          primary: { label: "Continue", next: "/urge" },
-          status: "Calm engaged"
-        },
-
-        "/urge": {
-          title: "Stop the Urge",
-          subtitle: "Don’t feed the loop. Create distance and choose the next right move.",
-          render: () => `
-            <div class="block">
-              <h3>Urge protocol (90 seconds)</h3>
-              <p>We don’t negotiate with urges. We observe, delay, redirect.</p>
-              <div class="hr"></div>
-              <ul class="list">
-                <li class="item"><strong>1) Name it</strong><span>“This is an urge, not a command.”</span></li>
-                <li class="item"><strong>2) Delay</strong><span>Set a 10-minute timer. No action until it ends.</span></li>
-                <li class="item"><strong>3) Replace</strong><span>Do a small physical action: water, walk, shower, push-ups.</span></li>
-              </ul>
-            </div>
-          `,
-          primary: { label: "Continue", next: "/move" },
-          status: "Urge contained"
-        },
-
-        "/move": {
-          title: "Move Forward",
-          subtitle: "One small step that improves your life today.",
-          render: () => `
-            <div class="grid">
-              <div class="col-6">
-                <div class="block">
-                  <h3>Choose a direction</h3>
-                  <label for="domain">What needs a next step?</label>
-                  <select class="select" id="domain">
-                    <option value="body">Body / energy</option>
-                    <option value="home">Home / environment</option>
-                    <option value="work">Work / money</option>
-                    <option value="people">Relationships</option>
-                    <option value="mind">Mind / clarity</option>
-                  </select>
-                  <div class="hr"></div>
-                  <label for="step">Smallest next action (2–10 minutes)</label>
-                  <input class="input" id="step" placeholder="e.g., 10 push-ups, take out trash, 1 email…" />
-                </div>
-              </div>
-
-              <div class="col-6">
-                <div class="block">
-                  <h3>Make it real</h3>
-                  <p>Finish by committing to a start time.</p>
-                  <div class="hr"></div>
-                  <label for="when">Start time</label>
-                  <input class="input" id="when" placeholder="e.g., now / 9:10am / after coffee" />
-                  <div class="hr"></div>
-                  <label for="note">Optional note</label>
-                  <textarea class="textarea" id="note" placeholder="What might sabotage this? What will you do instead?"></textarea>
-                </div>
-              </div>
-            </div>
-          `,
-          primary: { label: "Commit", next: "/home" },
-          status: "Ready to act"
-        },
-
-        "/done": {
-          title: "Get Something Done",
-          subtitle: "Activate the body. Break the freeze.",
-          render: () => `
-            <div class="block">
-              <h3>2-minute activation</h3>
-              <p>Pick one. Start immediately. No debating.</p>
-              <div class="hr"></div>
-              <ul class="list">
-                <li class="item"><strong>Option A</strong><span>60-second brisk walk in place.</span></li>
-                <li class="item"><strong>Option B</strong><span>20 squats (or wall sits if needed).</span></li>
-                <li class="item"><strong>Option C</strong><span>Set a 5-minute timer: clean one surface.</span></li>
-              </ul>
-            </div>
-          `,
-          primary: { label: "Next: Move Forward", next: "/move" },
-          status: "Activation ready"
-        },
-
-        "/next": {
-          title: "Find Your Next Step",
-          subtitle: "Clarity without overthinking.",
-          render: () => `
-            <div class="block">
-              <h3>Choose your next step</h3>
-              <p>Answer fast. First true answer wins.</p>
-              <div class="hr"></div>
-
-              <div class="grid">
-                <div class="col-6">
-                  <label for="focus">What matters most in the next 24 hours?</label>
-                  <select class="select" id="focus">
-                    <option value="body">Body / energy</option>
-                    <option value="home">Home / environment</option>
-                    <option value="work">Work / money</option>
-                    <option value="people">Relationships</option>
-                    <option value="mind">Mind / clarity</option>
-                  </select>
-                </div>
-                <div class="col-6">
-                  <label for="constraint">What is the main constraint?</label>
-                  <select class="select" id="constraint">
-                    <option value="time">Time</option>
-                    <option value="energy">Energy</option>
-                    <option value="fear">Fear / avoidance</option>
-                    <option value="conflict">Conflict / uncertainty</option>
-                    <option value="focus">Distraction</option>
-                  </select>
-                </div>
-                <div class="col-12">
-                  <label for="micro">Smallest action you can do in 2–10 minutes</label>
-                  <input class="input" id="micro" placeholder="e.g., drink water, write 3 bullets, schedule one thing…" />
-                </div>
-              </div>
-
-              <div class="hr"></div>
-              <ul class="list">
-                <li class="item"><strong>Rule</strong><span>If it takes longer than 10 minutes, shrink it until it doesn’t.</span></li>
-                <li class="item"><strong>Rule</strong><span>If you’re stuck, choose “body” and do a 2-minute activation.</span></li>
-              </ul>
-            </div>
-          `,
-          primary: { label: "Do it now", next: "/done" },
-          status: "Clarity ready"
-        }
-      };
-
-      function navTo(path){ location.hash = "#" + path; }
-
-      function render(){
-        const raw = (location.hash || "#/home").replace(/^#/, "");
-        const r = routes[raw] || routes["/home"];
-
-        if (r.home) {
-          home.style.display = "";
-          module.style.display = "none";
-          return;
-        }
-
-        home.style.display = "none";
-        module.style.display = "";
-
-        viewTitle.textContent = r.title || "";
-        viewSubtitle.textContent = r.subtitle || "";
-        viewBody.innerHTML = (typeof r.render === "function") ? r.render() : "";
-        statusPill.textContent = r.status || "Ready";
-
-        btnPrimary.textContent = r.primary?.label || "Continue";
-        btnPrimary.onclick = () => navTo(r.primary?.next || "/home");
+      function showError(title, msg) {
+        if (!main) return;
+        main.innerHTML = `
+          <div style="padding:16px;border:1px solid rgba(255,0,0,.35);border-radius:14px;background:rgba(255,0,0,.08)">
+            <div style="font-weight:900;margin-bottom:6px">${title}</div>
+            <div style="font-family:monospace;white-space:pre-wrap">${msg}</div>
+          </div>
+        `;
       }
 
-      document.addEventListener("click", (e) => {
-        const go = e.target.closest("[data-go]");
-        if (!go) return;
-        navTo(go.dataset.go);
+      window.addEventListener("error", (e) => {
+        showError("Praxis Error", e.message || "Unknown error");
       });
 
-      btnBack.addEventListener("click", () => navTo("/home"));
+      window.addEventListener("unhandledrejection", (e) => {
+        const msg = (e.reason && e.reason.message) ? e.reason.message : String(e.reason);
+        showError("Praxis Error", msg);
+      });
 
-      window.addEventListener("hashchange", render);
-      render();
+      (async () => {
+        try {
+          await import("./js/app.js");
+
+          setTimeout(() => {
+            if (main && main.children.length === 0) {
+              showError(
+                "Praxis Loaded, but nothing rendered",
+                "This usually means a router/render function didn’t run or an early error stopped rendering."
+              );
+            }
+          }, 1200);
+        } catch (err) {
+          showError("Failed to load ./js/app.js", (err && err.message) ? err.message : String(err));
+        }
+      })();
     })();
   </script>
 </body>
