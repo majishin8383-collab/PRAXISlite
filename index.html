@@ -20,12 +20,12 @@
       --r:18px;
       --r2:14px;
       --w:980px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
-
     body{
       margin:0;
       font-family:var(--sans);
@@ -37,101 +37,97 @@
         var(--bg);
     }
 
-    /* Header */
-    .topbar{
-      position:sticky; top:0; z-index:10;
-      background: linear-gradient(to bottom, rgba(11,15,20,.92), rgba(11,15,20,.70));
-      backdrop-filter: blur(10px);
-      border-bottom:1px solid var(--line);
+    /* Layout */
+    .wrap{max-width:var(--w); margin:0 auto; padding:18px 18px 38px;}
+    .top{
+      display:flex; align-items:center; gap:12px;
+      padding:16px 0 14px;
     }
-
-    .brand{
-      max-width:var(--w);
-      margin:0 auto;
-      padding:16px 18px;
-      display:flex; gap:12px; align-items:center;
-    }
-
     .logo{
-      width:38px; height:38px;
-      border-radius:12px;
+      width:40px; height:40px; border-radius:14px;
       display:grid; place-items:center;
-      font-weight:800;
+      font-weight:900;
       background: linear-gradient(135deg, rgba(125,211,252,.25), rgba(96,165,250,.14));
       border:1px solid rgba(125,211,252,.22);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
     }
+    .brandName{font-weight:900; letter-spacing:.2px}
+    .brandTag{color:var(--muted); font-size:13px; margin-top:2px}
 
-    .brandName{font-weight:800}
-    .brandTag{color:var(--muted); font-size:13px}
-
-    /* NAV BUTTON GRID */
-    .navGrid{
-      max-width:var(--w);
-      margin:8px auto 0;
-      padding:0 18px 14px;
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:12px;
-    }
-
-    @media (max-width:760px){
-      .navGrid{grid-template-columns: repeat(2, 1fr);}
-    }
-
-    .navBtn{
-      padding:16px 14px;
-      border-radius:16px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.04);
-      color:var(--text);
-      font-size:15px;
-      font-weight:600;
-      cursor:pointer;
-      box-shadow: var(--shadow);
-    }
-
-    .navBtn.primary{
-      background: linear-gradient(135deg, rgba(125,211,252,.30), rgba(96,165,250,.18));
-      border-color: rgba(125,211,252,.45);
-    }
-
-    .navBtn.ghost{
-      background: rgba(0,0,0,.25);
-      color: var(--muted);
-    }
-
-    .navBtn.active{
-      outline:2px solid rgba(125,211,252,.45);
-    }
-
-    /* Main shell */
-    .shell{
-      max-width:var(--w);
-      margin:0 auto;
-      padding:18px;
-    }
-
-    .card{
+    /* Home buttons */
+    .homeCard{
       background: linear-gradient(180deg, rgba(18,24,37,.92), rgba(15,20,32,.92));
       border:1px solid var(--line);
       border-radius:var(--r);
       box-shadow:var(--shadow);
       overflow:hidden;
     }
-
-    .cardHead{padding:20px; border-bottom:1px solid var(--line)}
+    .homeHead{
+      padding:18px 18px 12px;
+      border-bottom:1px solid var(--line);
+    }
     .h1{margin:0 0 6px; font-size:22px}
-    .sub{margin:0; color:var(--muted)}
+    .sub{margin:0; color:var(--muted); line-height:1.35}
 
-    .cardBody{padding:18px}
+    .btnGrid{
+      padding:16px 16px 18px;
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap:12px;
+    }
+    @media (min-width: 860px){
+      .btnGrid{grid-template-columns: repeat(3, 1fr);}
+    }
+
+    .bigBtn{
+      padding:16px 14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.04);
+      color:var(--text);
+      font-size:15px;
+      font-weight:800;
+      cursor:pointer;
+      text-align:left;
+      box-shadow: 0 10px 24px rgba(0,0,0,.25);
+    }
+    .bigBtn:hover{border-color: rgba(125,211,252,.35);}
+    .bigBtn .hint{
+      display:block;
+      margin-top:6px;
+      color:var(--muted);
+      font-weight:600;
+      font-size:13px;
+      line-height:1.25;
+    }
+
+    .bigBtn.primary{
+      border-color: rgba(125,211,252,.45);
+      background: linear-gradient(135deg, rgba(125,211,252,.26), rgba(96,165,250,.14));
+    }
+
+    /* Module view card */
+    .card{
+      background: linear-gradient(180deg, rgba(18,24,37,.92), rgba(15,20,32,.92));
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      margin-top:12px;
+    }
+    .cardHead{padding:18px 18px 10px; border-bottom:1px solid var(--line);}
+    .cardBody{padding:16px 18px 10px;}
     .cardFoot{
       display:flex; justify-content:space-between; align-items:center;
-      padding:14px 16px;
+      padding:12px 14px;
       border-top:1px solid var(--line);
       background: rgba(0,0,0,.12);
+      gap:10px;
+      flex-wrap:wrap;
     }
 
     .pill{
+      display:inline-flex; align-items:center;
       padding:8px 10px;
       border-radius:999px;
       border:1px solid var(--line);
@@ -142,49 +138,65 @@
 
     .btn{
       border-radius:12px;
-      padding:10px 14px;
+      padding:10px 12px;
       border:1px solid var(--line);
       background: rgba(255,255,255,.03);
       color:var(--text);
       cursor:pointer;
+      font-weight:700;
     }
-
+    .btn:hover{border-color: rgba(125,211,252,.25);}
     .btn.primary{
-      background: linear-gradient(135deg, rgba(125,211,252,.22), rgba(96,165,250,.12));
       border-color: rgba(125,211,252,.35);
+      background: linear-gradient(135deg, rgba(125,211,252,.20), rgba(96,165,250,.10));
     }
+    .btn.ghost{background: transparent; color: var(--muted);}
 
-    .grid{display:grid; grid-template-columns:repeat(12,1fr); gap:12px}
-    .col-6{grid-column:span 6}
-    .col-12{grid-column:span 12}
-    @media(max-width:760px){.col-6{grid-column:span 12}}
-
+    /* Content bits */
     .block{
       border:1px solid var(--line);
       background: rgba(255,255,255,.03);
       border-radius:var(--r2);
       padding:14px;
+      margin:10px 0 0;
     }
-
     .block h3{margin:0 0 6px; font-size:15px}
-    .block p{margin:0; color:var(--muted)}
+    .block p{margin:0; color:var(--muted); line-height:1.45; font-size:14px}
+    .hr{height:1px; background:var(--line); margin:14px 0}
+    .list{list-style:none; padding:0; margin:10px 0 0; display:flex; flex-direction:column; gap:8px;}
+    .item{padding:12px; border-radius:14px; border:1px solid var(--line); background: rgba(0,0,0,.10); color:var(--text)}
+    .item span{color:var(--muted); display:block; margin-top:4px; font-size:13px; line-height:1.3}
 
-    .list{list-style:none; padding:0; margin:10px 0 0; display:flex; flex-direction:column; gap:8px}
-    .item{padding:12px; border-radius:14px; border:1px solid var(--line); background: rgba(0,0,0,.1)}
+    .grid{display:grid; grid-template-columns:repeat(12,1fr); gap:12px; margin-top:12px;}
+    .col-6{grid-column:span 6}
+    .col-12{grid-column:span 12}
+    @media(max-width:760px){.col-6{grid-column:span 12}}
+
+    label{display:block; margin:0 0 6px; color:var(--muted); font-size:13px}
+    .input,.select,.textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      background: rgba(0,0,0,.18);
+      color:var(--text);
+      outline:none;
+    }
+    .textarea{min-height:92px; resize:vertical;}
 
     .footer{
       max-width:var(--w);
       margin:0 auto;
-      padding:20px 18px;
-      color:var(--muted);
+      padding:18px 18px 24px;
+      color:rgba(170,182,204,.85);
       font-size:13px;
     }
   </style>
 </head>
 
 <body>
-  <header class="topbar">
-    <div class="brand">
+  <div class="wrap">
+    <div class="top">
       <div class="logo">P</div>
       <div>
         <div class="brandName">PRAXIS Lite</div>
@@ -192,29 +204,64 @@
       </div>
     </div>
 
-    <section class="navGrid">
-      <button class="navBtn" data-go="/reset">Reset</button>
-      <button class="navBtn" data-go="/calm">Calm</button>
-      <button class="navBtn" data-go="/urge">Stop the Urge</button>
-      <button class="navBtn primary" data-go="/move">Move Forward</button>
-      <button class="navBtn ghost" data-go="/reset">Ground</button>
-      <button class="navBtn ghost" data-go="/reset">Home</button>
-    </section>
-  </header>
+    <!-- HOME (6-button screen) -->
+    <section id="home" class="homeCard" aria-label="Home">
+      <div class="homeHead">
+        <h1 class="h1">Choose your next tool</h1>
+        <p class="sub">Big buttons. No menus. One step at a time.</p>
+      </div>
 
-  <main class="shell">
-    <section class="card">
+      <div class="btnGrid">
+        <button class="bigBtn primary" data-go="/reset">
+          Reset
+          <span class="hint">Interrupt the spiral fast.</span>
+        </button>
+
+        <button class="bigBtn" data-go="/calm">
+          Calm Me Down
+          <span class="hint">Reduce intensity. Regain choice.</span>
+        </button>
+
+        <button class="bigBtn" data-go="/urge">
+          Stop the Urge
+          <span class="hint">Delay → distance → redirect.</span>
+        </button>
+
+        <button class="bigBtn" data-go="/move">
+          Move Forward
+          <span class="hint">One small action that improves today.</span>
+        </button>
+
+        <button class="bigBtn" data-go="/checkin">
+          Quick Check-In
+          <span class="hint">Name it. Rate it. Pick a direction.</span>
+        </button>
+
+        <button class="bigBtn" data-go="/tools">
+          Emergency Tools
+          <span class="hint">Fast grounding + stabilizers.</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- MODULE VIEW -->
+    <section id="module" class="card" aria-label="Module" style="display:none;">
       <div class="cardHead">
         <h1 id="viewTitle" class="h1"></h1>
         <p id="viewSubtitle" class="sub"></p>
       </div>
+
       <div id="viewBody" class="cardBody"></div>
+
       <div class="cardFoot">
-        <span id="statusPill" class="pill"></span>
-        <button id="btnPrimary" class="btn primary">Continue</button>
+        <span id="statusPill" class="pill">Ready</span>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button id="btnBack" class="btn ghost" type="button">Home</button>
+          <button id="btnPrimary" class="btn primary" type="button">Continue</button>
+        </div>
       </div>
     </section>
-  </main>
+  </div>
 
   <footer class="footer">
     © <span id="year"></span> PRAXIS Lite. All rights reserved.
@@ -222,62 +269,225 @@
 
   <script>
     (() => {
-      const $ = s => document.querySelector(s);
-      const viewTitle=$("#viewTitle"), viewSubtitle=$("#viewSubtitle"),
-            viewBody=$("#viewBody"), btnPrimary=$("#btnPrimary"),
-            statusPill=$("#statusPill");
-      $("#year").textContent=new Date().getFullYear();
+      const $ = (s) => document.querySelector(s);
 
-      const routes={
-        "/reset":{
-          t:"Reset", s:"Interrupt the spiral. Get back into your body.",
-          b:`<div class="block"><h3>30-second reset</h3><ul class="list">
-             <li class="item">Name 5 things you see</li>
-             <li class="item">Feet into floor ×10s</li>
-             <li class="item">Exhale longer than inhale ×5</li></ul></div>`,
-          n:"/calm", st:"Reset ready"
+      const home = $("#home");
+      const module = $("#module");
+      const viewTitle = $("#viewTitle");
+      const viewSubtitle = $("#viewSubtitle");
+      const viewBody = $("#viewBody");
+      const statusPill = $("#statusPill");
+      const btnPrimary = $("#btnPrimary");
+      const btnBack = $("#btnBack");
+
+      $("#year").textContent = String(new Date().getFullYear());
+
+      const routes = {
+        "/home": {
+          home: true
         },
-        "/calm":{
-          t:"Calm", s:"Reduce intensity. Regain choice.",
-          b:`<div class="block"><h3>Breath ladder</h3>
-             <p>In 4 / Out 6 → 7 → 8</p></div>`,
-          n:"/urge", st:"Calm engaged"
+
+        "/reset": {
+          title: "Reset",
+          subtitle: "Interrupt the spiral. Get back into your body.",
+          render: () => `
+            <div class="block">
+              <h3>30-second reset</h3>
+              <p>Exhale longer than you inhale. Shoulders down. Feet on the floor.</p>
+              <div class="hr"></div>
+              <ul class="list">
+                <li class="item">
+                  <strong>Step 1</strong>
+                  <span>Look around. Name 5 things you see.</span>
+                </li>
+                <li class="item">
+                  <strong>Step 2</strong>
+                  <span>Press your feet into the ground for 10 seconds.</span>
+                </li>
+                <li class="item">
+                  <strong>Step 3</strong>
+                  <span>Slow exhale: 6 out / 4 in × 5.</span>
+                </li>
+              </ul>
+            </div>
+          `,
+          primary: { label: "Continue", next: "/calm" },
+          status: "Reset ready"
         },
-        "/urge":{
-          t:"Stop the Urge", s:"Don’t feed the loop.",
-          b:`<div class="block"><ul class="list">
-             <li class="item">Name the urge</li>
-             <li class="item">Delay 10 minutes</li>
-             <li class="item">Replace with movement</li></ul></div>`,
-          n:"/move", st:"Urge contained"
+
+        "/calm": {
+          title: "Calm Me Down",
+          subtitle: "Reduce intensity. Regain choice.",
+          render: () => `
+            <div class="grid">
+              <div class="col-6">
+                <div class="block">
+                  <h3>Breath ladder</h3>
+                  <p>3 rounds. Keep it gentle.</p>
+                  <div class="hr"></div>
+                  <ul class="list">
+                    <li class="item"><strong>Round 1</strong><span>In 4 / Out 6</span></li>
+                    <li class="item"><strong>Round 2</strong><span>In 4 / Out 7</span></li>
+                    <li class="item"><strong>Round 3</strong><span>In 4 / Out 8</span></li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="block">
+                  <h3>Body signal</h3>
+                  <p>Name where you feel it. This lowers fusion.</p>
+                  <div class="hr"></div>
+                  <label for="signal">Where is it strongest?</label>
+                  <input class="input" id="signal" placeholder="e.g., chest, jaw, stomach" />
+                </div>
+              </div>
+            </div>
+          `,
+          primary: { label: "Continue", next: "/urge" },
+          status: "Calm engaged"
         },
-        "/move":{
-          t:"Move Forward", s:"One small step today.",
-          b:`<div class="block"><p>Choose the smallest action you can finish.</p></div>`,
-          n:"/reset", st:"Ready to act"
+
+        "/urge": {
+          title: "Stop the Urge",
+          subtitle: "Don’t feed the loop. Create distance and choose the next right move.",
+          render: () => `
+            <div class="block">
+              <h3>Urge protocol (90 seconds)</h3>
+              <p>We don’t negotiate with urges. We observe, delay, redirect.</p>
+              <div class="hr"></div>
+              <ul class="list">
+                <li class="item"><strong>1) Name it</strong><span>“This is an urge, not a command.”</span></li>
+                <li class="item"><strong>2) Delay</strong><span>Set a 10-minute timer. No action until it ends.</span></li>
+                <li class="item"><strong>3) Replace</strong><span>Do a small physical action: water, walk, shower, push-ups.</span></li>
+              </ul>
+            </div>
+          `,
+          primary: { label: "Continue", next: "/move" },
+          status: "Urge contained"
+        },
+
+        "/move": {
+          title: "Move Forward",
+          subtitle: "One small step that improves your life today.",
+          render: () => `
+            <div class="grid">
+              <div class="col-6">
+                <div class="block">
+                  <h3>Choose a direction</h3>
+                  <label for="domain">What needs a next step?</label>
+                  <select class="select" id="domain">
+                    <option value="body">Body / energy</option>
+                    <option value="home">Home / environment</option>
+                    <option value="work">Work / money</option>
+                    <option value="people">Relationships</option>
+                    <option value="mind">Mind / clarity</option>
+                  </select>
+                  <div class="hr"></div>
+                  <label for="step">Smallest next action (2–10 minutes)</label>
+                  <input class="input" id="step" placeholder="e.g., 10 push-ups, take out trash, 1 email…" />
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="block">
+                  <h3>Make it real</h3>
+                  <p>Finish by committing to a start time.</p>
+                  <div class="hr"></div>
+                  <label for="when">Start time</label>
+                  <input class="input" id="when" placeholder="e.g., now / 9:10am / after coffee" />
+                  <div class="hr"></div>
+                  <label for="note">Optional note</label>
+                  <textarea class="textarea" id="note" placeholder="What might sabotage this? What will you do instead?"></textarea>
+                </div>
+              </div>
+            </div>
+          `,
+          primary: { label: "Commit", next: "/home" },
+          status: "Ready to act"
+        },
+
+        "/checkin": {
+          title: "Quick Check-In",
+          subtitle: "Name it. Rate it. Pick a direction.",
+          render: () => `
+            <div class="block">
+              <h3>2-minute check-in</h3>
+              <div class="hr"></div>
+              <label for="state">What’s happening right now?</label>
+              <input class="input" id="state" placeholder="e.g., anxious, angry, craving, lonely" />
+              <div class="hr"></div>
+              <label for="intensity">Intensity (0–10)</label>
+              <input class="input" id="intensity" placeholder="e.g., 7" />
+              <div class="hr"></div>
+              <p>Choose your next tool:</p>
+              <ul class="list">
+                <li class="item"><strong>High intensity (7–10)</strong><span>Reset → Calm Me Down</span></li>
+                <li class="item"><strong>Urge present</strong><span>Stop the Urge</span></li>
+                <li class="item"><strong>Stable enough</strong><span>Move Forward</span></li>
+              </ul>
+            </div>
+          `,
+          primary: { label: "Go to Reset", next: "/reset" },
+          status: "Check-in captured"
+        },
+
+        "/tools": {
+          title: "Emergency Tools",
+          subtitle: "Fast grounding + stabilizers.",
+          render: () => `
+            <div class="block">
+              <h3>Fast tools</h3>
+              <ul class="list">
+                <li class="item"><strong>Cold water</strong><span>Splash face or hold cold pack on cheeks for 20–30s.</span></li>
+                <li class="item"><strong>Movement</strong><span>30 squats or a brisk 2-minute walk.</span></li>
+                <li class="item"><strong>Orient</strong><span>Look left/right slowly. Name 5 objects. Hear 3 sounds.</span></li>
+              </ul>
+            </div>
+          `,
+          primary: { label: "Back to Home", next: "/home" },
+          status: "Tools ready"
         }
       };
 
-      function route(){
-        const r=routes[(location.hash||"#/reset").slice(1)]||routes["/reset"];
-        viewTitle.textContent=r.t;
-        viewSubtitle.textContent=r.s;
-        viewBody.innerHTML=r.b;
-        statusPill.textContent=r.st;
-        btnPrimary.onclick=()=>location.hash="#"+r.n;
-        document.querySelectorAll(".navBtn").forEach(b=>{
-          b.classList.toggle("active", "#"+b.dataset.go===location.hash);
-        });
+      function navTo(path){
+        location.hash = "#" + path;
       }
 
-      document.addEventListener("click",e=>{
-        const b=e.target.closest("[data-go]");
-        if(b) location.hash="#"+b.dataset.go;
+      function render(){
+        const raw = (location.hash || "#/home").replace(/^#/, "");
+        const r = routes[raw] || routes["/home"];
+
+        if (r.home) {
+          home.style.display = "";
+          module.style.display = "none";
+          return;
+        }
+
+        home.style.display = "none";
+        module.style.display = "";
+
+        viewTitle.textContent = r.title || "";
+        viewSubtitle.textContent = r.subtitle || "";
+        viewBody.innerHTML = (typeof r.render === "function") ? r.render() : "";
+        statusPill.textContent = r.status || "Ready";
+
+        btnPrimary.textContent = r.primary?.label || "Continue";
+        btnPrimary.onclick = () => navTo(r.primary?.next || "/home");
+      }
+
+      document.addEventListener("click", (e) => {
+        const go = e.target.closest("[data-go]");
+        if (!go) return;
+        navTo(go.dataset.go);
       });
 
-      window.addEventListener("hashchange",route);
-      route();
+      btnBack.addEventListener("click", () => navTo("/home"));
+
+      window.addEventListener("hashchange", render);
+      render();
     })();
   </script>
 </body>
 </html>
+ 
