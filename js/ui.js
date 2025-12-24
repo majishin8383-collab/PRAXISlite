@@ -1,3 +1,4 @@
+import { navigate } from "./router.js";
 import { COPY } from "./data/copy.js";
 
 export function setMain(node) {
@@ -11,21 +12,29 @@ function el(tag, attrs = {}, children = []) {
   const node = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs)) {
     if (k === "class") node.className = v;
-    else if (k.startsWith("on") && typeof v === "function") node.addEventListener(k.slice(2).toLowerCase(), v);
-    else node.setAttribute(k, v);
+    else if (k.startsWith("on") && typeof v === "function") {
+      node.addEventListener(k.slice(2).toLowerCase(), v);
+    } else {
+      node.setAttribute(k, v);
+    }
   }
   for (const child of children) {
+    if (child == null) continue;
     node.appendChild(typeof child === "string" ? document.createTextNode(child) : child);
   }
   return node;
 }
 
 function tile(a) {
-  const dotClass = a.zone === "green" ? "dotGreen" : a.zone === "yellow" ? "dotYellow" : "dotRed";
+  const dotClass =
+    a.zone === "green" ? "dotGreen" :
+    a.zone === "yellow" ? "dotYellow" :
+    "dotRed";
+
   return el("button", {
     class: "actionTile",
     type: "button",
-    onClick: () => alert(`Next step: route to ${a.to}`)
+    onClick: () => navigate(a.to),
   }, [
     el("div", { class: "tileTop" }, [
       el("div", {}, [
