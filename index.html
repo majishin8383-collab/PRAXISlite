@@ -2,63 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Praxis</title>
-
-  <link rel="stylesheet" href="./styles/base.css" />
-  <link rel="stylesheet" href="./styles/components.css" />
-  <link rel="stylesheet" href="./styles/home.css" />
-  <link rel="stylesheet" href="./styles/flows.css" />
-  <link rel="stylesheet" href="./styles/redzone.css" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#0b0f14" />
+  <title>PRAXIS Lite</title>
+  <link rel="stylesheet" href="./styles/base.css?v=20251224a" />
 </head>
-
 <body>
-  <div id="app" class="app">
-    <header class="appHeader">
-      <div class="brand">
-        <div class="brandTitle">PRAXIS</div>
-        <div class="brandSub">Stabilize → Act → Move forward</div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">P</div>
+      <div class="brandText">
+        <div class="brandName">PRAXIS Lite</div>
+        <div class="brandTag">Stabilize → Choose → Move Forward</div>
+      </div>
+    </div>
+
+    <nav class="tabs" aria-label="Primary">
+      <a class="tab" href="#/reset" data-route="/reset">Reset</a>
+      <a class="tab" href="#/calm" data-route="/calm">Calm</a>
+      <a class="tab" href="#/urge" data-route="/urge">Stop the Urge</a>
+      <a class="tab" href="#/move" data-route="/move">Move Forward</a>
+    </nav>
+  </header>
+
+  <main class="shell">
+    <section class="card">
+      <div class="cardHead">
+        <h1 id="viewTitle" class="h1">Loading…</h1>
+        <p id="viewSubtitle" class="sub">If you see this for more than a second, something didn’t load.</p>
       </div>
 
-      <nav class="topNav">
-        <button class="linkBtn" id="navHome" type="button">Reset</button>
-      </nav>
-    </header>
+      <div id="viewBody" class="cardBody"></div>
 
-    <main id="main" class="main" role="main" aria-live="polite">
-      <div class="card cardPad">
-        <div class="badge">Loading…</div>
-        <p class="p">If this stays, the app failed to load.</p>
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footerNote">You don’t have to figure everything out. Just take the next step.</div>
-    </footer>
-  </div>
-
-  <script type="module">
-    const main = document.getElementById("main");
-
-    function showError(err) {
-      console.error(err);
-      main.innerHTML = `
-        <div class="card cardPad">
-          <div class="badge">App failed to load</div>
-          <p class="p">A JavaScript module didn’t load (usually a wrong path/filename or a syntax error).</p>
-          <p class="small" style="white-space:pre-wrap;">${String(err && (err.stack || err.message || err))}</p>
-          <div class="btnRow">
-            <button class="btn btnPrimary" onclick="location.reload()">Reload</button>
-          </div>
+      <div class="cardFoot">
+        <div class="footLeft">
+          <span class="pill" id="statusPill">Ready</span>
         </div>
-      `;
-    }
+        <div class="footRight">
+          <button class="btn ghost" id="btnHome" type="button">Home</button>
+          <button class="btn primary" id="btnPrimary" type="button">Continue</button>
+        </div>
+      </div>
+    </section>
 
-    try {
-      await import(`./js/app.js?v=${Date.now()}`);
-    } catch (err) {
-      showError(err);
-    }
-  </script>
+    <section class="mini">
+      <details>
+        <summary>What is this?</summary>
+        <p class="miniText">
+          Stable GitHub Pages build using hash routing so tabs always work.
+        </p>
+      </details>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>© <span id="year"></span> PRAXIS Lite. All rights reserved.</div>
+  </footer>
+
+  <script defer src="./app.js?v=20251224a"></script>
 </body>
 </html>
