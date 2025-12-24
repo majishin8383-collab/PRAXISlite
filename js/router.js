@@ -1,6 +1,6 @@
 import { setMain, renderHome } from "./ui.js";
 
-// Existing working flows
+// Existing working flows (these should exist)
 import { renderFocusSprint } from "./zones/green/focusSprint.js";
 import { renderTodayPlan } from "./zones/green/todayPlan.js";
 import { renderCalm } from "./zones/yellow/calm.js";
@@ -8,24 +8,14 @@ import { renderNoContact } from "./zones/yellow/noContactShield.js";
 import { renderEmergency } from "./zones/red/emergency.js";
 import { renderReflect } from "./zones/reflect.js";
 
-// TEMP BRIDGES (so the new Home tiles work immediately)
-// We'll replace these with real screens in the next steps.
-function renderMoveForwardBridge() {
-  return renderFocusSprint();
-}
-
-function renderDirectionBridge() {
-  return renderTodayPlan();
-}
-
-function renderNextStepBridge() {
-  return renderHome();
-}
+// Temporary bridges so new Reset tiles never dead-end
+function renderMoveForwardBridge() { return renderFocusSprint(); }
+function renderDirectionBridge() { return renderTodayPlan(); }
+function renderNextStepBridge() { return renderHome(); }
 
 const routes = new Map([
   ["#/home", () => renderHome()],
 
-  // Existing routes
   ["#/green/focus", () => renderFocusSprint()],
   ["#/green/today", () => renderTodayPlan()],
   ["#/yellow/calm", () => renderCalm()],
@@ -33,7 +23,6 @@ const routes = new Map([
   ["#/red/emergency", () => renderEmergency()],
   ["#/reflect", () => renderReflect()],
 
-  // New UX routes (wired)
   ["#/green/move", () => renderMoveForwardBridge()],
   ["#/green/direction", () => renderDirectionBridge()],
   ["#/green/next", () => renderNextStepBridge()],
