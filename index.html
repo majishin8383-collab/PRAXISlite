@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Praxis</title>
 
-  <!-- CSS -->
   <link rel="stylesheet" href="./styles/base.css" />
   <link rel="stylesheet" href="./styles/components.css" />
   <link rel="stylesheet" href="./styles/home.css" />
@@ -15,7 +14,6 @@
 
 <body>
   <div id="app" class="app">
-
     <header class="appHeader">
       <div class="brand">
         <div class="brandTitle">PRAXIS</div>
@@ -28,20 +26,39 @@
     </header>
 
     <main id="main" class="main" role="main" aria-live="polite">
-      <!-- JS renders here -->
+      <div class="card cardPad">
+        <div class="badge">Loading…</div>
+        <p class="p">If this stays, the app failed to load.</p>
+      </div>
     </main>
 
     <footer class="footer">
-      <div class="footerNote">
-        You don’t have to figure everything out. Just take the next step.
-      </div>
+      <div class="footerNote">You don’t have to figure everything out. Just take the next step.</div>
     </footer>
-
   </div>
 
-  <!-- JS (auto cache-bust for mobile dev) -->
   <script type="module">
-    import(`./js/app.js?v=${Date.now()}`);
+    const main = document.getElementById("main");
+
+    function showError(err) {
+      console.error(err);
+      main.innerHTML = `
+        <div class="card cardPad">
+          <div class="badge">App failed to load</div>
+          <p class="p">A JavaScript module didn’t load (usually a wrong path/filename or a syntax error).</p>
+          <p class="small" style="white-space:pre-wrap;">${String(err && (err.stack || err.message || err))}</p>
+          <div class="btnRow">
+            <button class="btn btnPrimary" onclick="location.reload()">Reload</button>
+          </div>
+        </div>
+      `;
+    }
+
+    try {
+      await import(`./js/app.js?v=${Date.now()}`);
+    } catch (err) {
+      showError(err);
+    }
   </script>
 </body>
 </html>
