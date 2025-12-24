@@ -12,11 +12,9 @@ export function renderCalm() {
       <li class="item"><strong>Round 2</strong><span>In 4 / Out 7</span></li>
       <li class="item"><strong>Round 3</strong><span>In 4 / Out 8</span></li>
     </ul>
-
     <div class="hr"></div>
-
     <label>Where is it strongest?</label>
-    <input class="input" id="calmSignal" placeholder="e.g., chest, jaw, stomach" />
+    <input class="input" placeholder="e.g., chest, jaw, stomach" />
   `;
 
   return renderSimpleFlow(
