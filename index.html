@@ -5,8 +5,167 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#0b0f14" />
   <title>PRAXIS Lite</title>
-  <link rel="stylesheet" href="./styles/base.css?v=20251224b" />
+
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#121825;
+      --panel2:#0f1420;
+      --text:#e9eef7;
+      --muted:#aab6cc;
+      --line:rgba(255,255,255,.08);
+      --accent:#7dd3fc;
+      --accent2:#60a5fa;
+      --shadow:0 14px 50px rgba(0,0,0,.45);
+      --r:18px;
+      --r2:14px;
+      --w:980px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 15% 10%, rgba(96,165,250,.18), transparent 60%),
+        radial-gradient(800px 520px at 85% 0%, rgba(125,211,252,.12), transparent 55%),
+        radial-gradient(900px 700px at 55% 100%, rgba(34,197,94,.10), transparent 60%),
+        var(--bg);
+    }
+    a{color:inherit}
+    button{font:inherit}
+    .topbar{
+      position:sticky; top:0; z-index:10;
+      background: linear-gradient(to bottom, rgba(11,15,20,.92), rgba(11,15,20,.70));
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .brand{
+      max-width:var(--w);
+      margin:0 auto;
+      padding:16px 18px 10px;
+      display:flex; gap:12px; align-items:center;
+    }
+    .logo{
+      width:38px; height:38px; border-radius:12px;
+      display:grid; place-items:center;
+      background: linear-gradient(135deg, rgba(125,211,252,.25), rgba(96,165,250,.14));
+      border:1px solid rgba(125,211,252,.22);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      font-weight:800;
+    }
+    .brandName{font-weight:800; letter-spacing:.2px}
+    .brandTag{color:var(--muted); font-size:13px; margin-top:2px}
+    .tabs{
+      max-width:var(--w);
+      margin:0 auto;
+      padding:0 18px 14px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .tab{
+      text-decoration:none;
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.03);
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:14px;
+    }
+    .tab:hover{border-color:rgba(125,211,252,.22); color:var(--text)}
+    .tab.active{
+      color:var(--text);
+      border-color:rgba(125,211,252,.35);
+      background: linear-gradient(135deg, rgba(125,211,252,.15), rgba(96,165,250,.10));
+    }
+    .shell{
+      max-width:var(--w);
+      margin:0 auto;
+      padding:22px 18px 40px;
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(18,24,37,.92), rgba(15,20,32,.92));
+      border:1px solid var(--line);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .cardHead{padding:20px 20px 10px; border-bottom:1px solid var(--line)}
+    .h1{margin:0 0 6px; font-size:22px}
+    .sub{margin:0; color:var(--muted); line-height:1.35}
+    .cardBody{padding:18px 20px 8px}
+    .cardFoot{
+      display:flex; justify-content:space-between; gap:12px; align-items:center;
+      padding:14px 16px;
+      border-top:1px solid var(--line);
+      background: rgba(0,0,0,.12);
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color:var(--muted);
+      font-size:13px;
+    }
+    .btn{
+      border-radius:12px;
+      padding:10px 12px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      color:var(--text);
+      cursor:pointer;
+    }
+    .btn:hover{border-color:rgba(125,211,252,.25)}
+    .btn.primary{
+      border-color:rgba(125,211,252,.35);
+      background: linear-gradient(135deg, rgba(125,211,252,.22), rgba(96,165,250,.12));
+    }
+    .btn.ghost{background: transparent;}
+    .grid{display:grid; grid-template-columns: repeat(12, 1fr); gap:12px; margin-top:12px}
+    .col-12{grid-column: span 12}
+    .col-6{grid-column: span 6}
+    @media (max-width: 760px){ .col-6{grid-column: span 12} }
+    .block{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      border-radius:var(--r2);
+      padding:14px;
+    }
+    .block h3{margin:0 0 6px; font-size:15px}
+    .block p{margin:0; color:var(--muted); line-height:1.45; font-size:14px}
+    .list{margin:10px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:8px}
+    .item{padding:12px 12px; border-radius:14px; border:1px solid var(--line); background: rgba(0,0,0,.10)}
+    .item strong{display:block; font-size:14px; margin-bottom:4px}
+    .item span{color:var(--muted); font-size:13px; line-height:1.35}
+    .hr{height:1px; background:var(--line); margin:14px 0}
+    .input, .select, .textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      background: rgba(0,0,0,.18);
+      color:var(--text);
+      outline:none;
+    }
+    .textarea{min-height:92px; resize:vertical}
+    label{display:block; margin:0 0 6px; color:var(--muted); font-size:13px}
+    .footer{
+      max-width:var(--w);
+      margin:0 auto;
+      padding:20px 18px 26px;
+      color:rgba(170,182,204,.85);
+      font-size:13px;
+    }
+    .mono{font-family:var(--mono); font-size:12px}
+  </style>
 </head>
+
 <body>
   <header class="topbar">
     <div class="brand">
@@ -51,32 +210,164 @@
   </footer>
 
   <script>
-    // If app.js fails to load, show it clearly (no console required)
-    window.__appJsLoaded = false;
-    window.addEventListener("load", () => {
-      if (!window.__appJsLoaded) {
-        const t = document.getElementById("viewTitle");
-        const s = document.getElementById("viewSubtitle");
-        const b = document.getElementById("viewBody");
-        if (t) t.textContent = "Script didn’t load";
-        if (s) s.textContent = "app.js was not found or blocked. Fix file location/name and reload.";
-        if (b) b.innerHTML = `
-          <div class="block">
-            <h3>Fix checklist</h3>
-            <ul class="list">
-              <li class="item"><strong>1)</strong><span>Confirm <kbd>app.js</kbd> exists in the repo root (same level as <kbd>index.html</kbd>).</span></li>
-              <li class="item"><strong>2)</strong><span>File name must be exactly <kbd>app.js</kbd> (case-sensitive on GitHub Pages).</span></li>
-              <li class="item"><strong>3)</strong><span>Commit + push, then hard refresh (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>).</span></li>
-            </ul>
-          </div>
-        `;
-      }
-    });
-  </script>
+    // Single-file app boot (no external JS paths to break)
+    (() => {
+      const $ = (sel) => document.querySelector(sel);
 
-  <script defer src="./app.js?v=20251224b"
-    onload="window.__appJsLoaded=true"
-    onerror="window.__appJsLoaded=false">
+      const viewTitle = $("#viewTitle");
+      const viewSubtitle = $("#viewSubtitle");
+      const viewBody = $("#viewBody");
+      const btnPrimary = $("#btnPrimary");
+      const btnHome = $("#btnHome");
+      const statusPill = $("#statusPill");
+      const yearEl = $("#year");
+
+      yearEl.textContent = String(new Date().getFullYear());
+
+      const routes = {
+        "/reset": {
+          title: "Reset",
+          subtitle: "Interrupt the spiral. Get back into your body.",
+          render: () => `
+            <div class="block">
+              <h3>30-second reset</h3>
+              <p>Exhale longer than you inhale. Shoulders down. Feet on the floor.</p>
+              <div class="hr"></div>
+              <ul class="list">
+                <li class="item"><strong>Step 1</strong><span>Look around and name 5 things you see.</span></li>
+                <li class="item"><strong>Step 2</strong><span>Press your feet into the ground for 10 seconds.</span></li>
+                <li class="item"><strong>Step 3</strong><span>Slow exhale: 6 seconds out, 4 seconds in × 5.</span></li>
+              </ul>
+            </div>
+          `,
+          primary: { label: "Continue", next: "/calm" },
+          status: "Reset ready",
+        },
+
+        "/calm": {
+          title: "Calm",
+          subtitle: "Reduce intensity. Regain choice.",
+          render: () => `
+            <div class="grid">
+              <div class="col-6">
+                <div class="block">
+                  <h3>Breath ladder</h3>
+                  <p>Do 3 rounds. Keep it simple. Don’t force it.</p>
+                  <div class="hr"></div>
+                  <ul class="list">
+                    <li class="item"><strong>Round 1</strong><span>In 4 / Out 6</span></li>
+                    <li class="item"><strong>Round 2</strong><span>In 4 / Out 7</span></li>
+                    <li class="item"><strong>Round 3</strong><span>In 4 / Out 8</span></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="block">
+                  <h3>Body signal</h3>
+                  <p>Name where you feel it (chest, throat, gut). This reduces fusion.</p>
+                  <div class="hr"></div>
+                  <label for="signal">Where is it strongest?</label>
+                  <input class="input" id="signal" placeholder="e.g., chest, jaw, stomach" />
+                </div>
+              </div>
+            </div>
+          `,
+          primary: { label: "Continue", next: "/urge" },
+          status: "Calm engaged",
+        },
+
+        "/urge": {
+          title: "Stop the Urge",
+          subtitle: "Don’t feed the loop. Create distance and choose the next right move.",
+          render: () => `
+            <div class="block">
+              <h3>Urge protocol (90 seconds)</h3>
+              <p>We don’t negotiate with urges. We observe, delay, redirect.</p>
+              <div class="hr"></div>
+              <ul class="list">
+                <li class="item"><strong>1) Name it</strong><span>“This is an urge, not a command.”</span></li>
+                <li class="item"><strong>2) Delay</strong><span>Set a 10-minute timer. No action until it ends.</span></li>
+                <li class="item"><strong>3) Replace</strong><span>Do a small physical action: water, walk, shower, push-ups.</span></li>
+              </ul>
+            </div>
+          `,
+          primary: { label: "Continue", next: "/move" },
+          status: "Urge contained",
+        },
+
+        "/move": {
+          title: "Move Forward",
+          subtitle: "One small step that improves your life today.",
+          render: () => `
+            <div class="grid">
+              <div class="col-6">
+                <div class="block">
+                  <h3>Choose a direction</h3>
+                  <label for="domain">What needs a next step?</label>
+                  <select class="select" id="domain">
+                    <option value="body">Body / energy</option>
+                    <option value="home">Home / environment</option>
+                    <option value="work">Work / money</option>
+                    <option value="people">Relationships</option>
+                    <option value="mind">Mind / clarity</option>
+                  </select>
+                  <div class="hr"></div>
+                  <label for="step">Smallest next action (2–10 minutes)</label>
+                  <input class="input" id="step" placeholder="e.g., 10 push-ups, take out trash, 1 email…" />
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="block">
+                  <h3>Make it real</h3>
+                  <p>Finish by committing to a start time.</p>
+                  <div class="hr"></div>
+                  <label for="when">Start time</label>
+                  <input class="input" id="when" placeholder="e.g., now / 9:10am / after coffee" />
+                  <div class="hr"></div>
+                  <label for="note">Optional note</label>
+                  <textarea class="textarea" id="note" placeholder="What might sabotage this? What will you do instead?"></textarea>
+                </div>
+              </div>
+            </div>
+          `,
+          primary: { label: "Commit", next: "/reset" },
+          status: "Ready to act",
+        }
+      };
+
+      function getRoute() {
+        const raw = (location.hash || "#/reset").replace(/^#/, "");
+        return routes[raw] ? raw : "/reset";
+      }
+
+      function setActiveTab(route) {
+        document.querySelectorAll(".tab").forEach((a) => {
+          a.classList.toggle("active", a.getAttribute("data-route") === route);
+        });
+      }
+
+      function render(route) {
+        const r = routes[route];
+        setActiveTab(route);
+
+        viewTitle.textContent = r.title;
+        viewSubtitle.textContent = r.subtitle;
+        viewBody.innerHTML = r.render();
+
+        statusPill.textContent = r.status || "Ready";
+
+        btnPrimary.textContent = r.primary?.label || "Continue";
+        btnPrimary.onclick = () => {
+          const next = r.primary?.next || "/reset";
+          location.hash = `#${next}`;
+        };
+      }
+
+      btnHome.onclick = () => (location.hash = "#/reset");
+      window.addEventListener("hashchange", () => render(getRoute()));
+
+      render(getRoute());
+    })();
   </script>
 </body>
 </html>
