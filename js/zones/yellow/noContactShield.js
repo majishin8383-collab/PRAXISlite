@@ -227,7 +227,7 @@ export function renderNoContact() {
   function rerender(mode) {
     wrap.innerHTML = "";
     wrap.appendChild(header());
-wrap.appendChild(el("div", { class: "badge" }, ["NO-CONTACT SHIELD v1 ✅"]));
+    wrap.appendChild(el("div", { class: "badge" }, ["NO-CONTACT SHIELD v1 ✅"]));
 
     const card1 = el("div", { class: "card cardPad" }, [
       el("h2", { class: "h2" }, ["Shield"]),
