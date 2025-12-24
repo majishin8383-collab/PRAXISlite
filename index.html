@@ -37,12 +37,8 @@
         var(--bg);
     }
 
-    /* Layout */
     .wrap{max-width:var(--w); margin:0 auto; padding:18px 18px 38px;}
-    .top{
-      display:flex; align-items:center; gap:12px;
-      padding:16px 0 14px;
-    }
+    .top{display:flex; align-items:center; gap:12px; padding:16px 0 14px;}
     .logo{
       width:40px; height:40px; border-radius:14px;
       display:grid; place-items:center;
@@ -54,7 +50,7 @@
     .brandName{font-weight:900; letter-spacing:.2px}
     .brandTag{color:var(--muted); font-size:13px; margin-top:2px}
 
-    /* Home buttons */
+    /* Home */
     .homeCard{
       background: linear-gradient(180deg, rgba(18,24,37,.92), rgba(15,20,32,.92));
       border:1px solid var(--line);
@@ -62,10 +58,7 @@
       box-shadow:var(--shadow);
       overflow:hidden;
     }
-    .homeHead{
-      padding:18px 18px 12px;
-      border-bottom:1px solid var(--line);
-    }
+    .homeHead{padding:18px 18px 12px; border-bottom:1px solid var(--line);}
     .h1{margin:0 0 6px; font-size:22px}
     .sub{margin:0; color:var(--muted); line-height:1.35}
 
@@ -75,9 +68,7 @@
       grid-template-columns: repeat(2, 1fr);
       gap:12px;
     }
-    @media (min-width: 860px){
-      .btnGrid{grid-template-columns: repeat(3, 1fr);}
-    }
+    @media (min-width: 860px){ .btnGrid{grid-template-columns: repeat(3, 1fr);} }
 
     .bigBtn{
       padding:16px 14px;
@@ -86,7 +77,7 @@
       background: rgba(255,255,255,.04);
       color:var(--text);
       font-size:15px;
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
       text-align:left;
       box-shadow: 0 10px 24px rgba(0,0,0,.25);
@@ -96,17 +87,16 @@
       display:block;
       margin-top:6px;
       color:var(--muted);
-      font-weight:600;
+      font-weight:700;
       font-size:13px;
       line-height:1.25;
     }
-
     .bigBtn.primary{
       border-color: rgba(125,211,252,.45);
       background: linear-gradient(135deg, rgba(125,211,252,.26), rgba(96,165,250,.14));
     }
 
-    /* Module view card */
+    /* Module card */
     .card{
       background: linear-gradient(180deg, rgba(18,24,37,.92), rgba(15,20,32,.92));
       border:1px solid var(--line);
@@ -143,7 +133,7 @@
       background: rgba(255,255,255,.03);
       color:var(--text);
       cursor:pointer;
-      font-weight:700;
+      font-weight:800;
     }
     .btn:hover{border-color: rgba(125,211,252,.25);}
     .btn.primary{
@@ -204,11 +194,11 @@
       </div>
     </div>
 
-    <!-- HOME (6-button screen) -->
+    <!-- HOME (6 buttons — locked) -->
     <section id="home" class="homeCard" aria-label="Home">
       <div class="homeHead">
         <h1 class="h1">Choose your next tool</h1>
-        <p class="sub">Big buttons. No menus. One step at a time.</p>
+        <p class="sub">Simple. Clear. Built for dysregulated moments.</p>
       </div>
 
       <div class="btnGrid">
@@ -232,14 +222,14 @@
           <span class="hint">One small action that improves today.</span>
         </button>
 
-        <button class="bigBtn" data-go="/checkin">
-          Quick Check-In
-          <span class="hint">Name it. Rate it. Pick a direction.</span>
+        <button class="bigBtn" data-go="/done">
+          Get Something Done
+          <span class="hint">Activate the body. Break the freeze.</span>
         </button>
 
-        <button class="bigBtn" data-go="/tools">
-          Emergency Tools
-          <span class="hint">Fast grounding + stabilizers.</span>
+        <button class="bigBtn" data-go="/next">
+          Find Your Next Step
+          <span class="hint">Clarity without overthinking.</span>
         </button>
       </div>
     </section>
@@ -283,9 +273,7 @@
       $("#year").textContent = String(new Date().getFullYear());
 
       const routes = {
-        "/home": {
-          home: true
-        },
+        "/home": { home: true },
 
         "/reset": {
           title: "Reset",
@@ -296,18 +284,9 @@
               <p>Exhale longer than you inhale. Shoulders down. Feet on the floor.</p>
               <div class="hr"></div>
               <ul class="list">
-                <li class="item">
-                  <strong>Step 1</strong>
-                  <span>Look around. Name 5 things you see.</span>
-                </li>
-                <li class="item">
-                  <strong>Step 2</strong>
-                  <span>Press your feet into the ground for 10 seconds.</span>
-                </li>
-                <li class="item">
-                  <strong>Step 3</strong>
-                  <span>Slow exhale: 6 out / 4 in × 5.</span>
-                </li>
+                <li class="item"><strong>Step 1</strong><span>Look around. Name 5 things you see.</span></li>
+                <li class="item"><strong>Step 2</strong><span>Press your feet into the ground for 10 seconds.</span></li>
+                <li class="item"><strong>Step 3</strong><span>Slow exhale: 6 out / 4 in × 5.</span></li>
               </ul>
             </div>
           `,
@@ -407,52 +386,74 @@
           status: "Ready to act"
         },
 
-        "/checkin": {
-          title: "Quick Check-In",
-          subtitle: "Name it. Rate it. Pick a direction.",
+        "/done": {
+          title: "Get Something Done",
+          subtitle: "Activate the body. Break the freeze.",
           render: () => `
             <div class="block">
-              <h3>2-minute check-in</h3>
+              <h3>2-minute activation</h3>
+              <p>Pick one. Start immediately. No debating.</p>
               <div class="hr"></div>
-              <label for="state">What’s happening right now?</label>
-              <input class="input" id="state" placeholder="e.g., anxious, angry, craving, lonely" />
-              <div class="hr"></div>
-              <label for="intensity">Intensity (0–10)</label>
-              <input class="input" id="intensity" placeholder="e.g., 7" />
-              <div class="hr"></div>
-              <p>Choose your next tool:</p>
               <ul class="list">
-                <li class="item"><strong>High intensity (7–10)</strong><span>Reset → Calm Me Down</span></li>
-                <li class="item"><strong>Urge present</strong><span>Stop the Urge</span></li>
-                <li class="item"><strong>Stable enough</strong><span>Move Forward</span></li>
+                <li class="item"><strong>Option A</strong><span>60-second brisk walk in place.</span></li>
+                <li class="item"><strong>Option B</strong><span>20 squats (or wall sits if needed).</span></li>
+                <li class="item"><strong>Option C</strong><span>Set a 5-minute timer: clean one surface.</span></li>
               </ul>
             </div>
           `,
-          primary: { label: "Go to Reset", next: "/reset" },
-          status: "Check-in captured"
+          primary: { label: "Next: Move Forward", next: "/move" },
+          status: "Activation ready"
         },
 
-        "/tools": {
-          title: "Emergency Tools",
-          subtitle: "Fast grounding + stabilizers.",
+        "/next": {
+          title: "Find Your Next Step",
+          subtitle: "Clarity without overthinking.",
           render: () => `
             <div class="block">
-              <h3>Fast tools</h3>
+              <h3>Choose your next step</h3>
+              <p>Answer fast. First true answer wins.</p>
+              <div class="hr"></div>
+
+              <div class="grid">
+                <div class="col-6">
+                  <label for="focus">What matters most in the next 24 hours?</label>
+                  <select class="select" id="focus">
+                    <option value="body">Body / energy</option>
+                    <option value="home">Home / environment</option>
+                    <option value="work">Work / money</option>
+                    <option value="people">Relationships</option>
+                    <option value="mind">Mind / clarity</option>
+                  </select>
+                </div>
+                <div class="col-6">
+                  <label for="constraint">What is the main constraint?</label>
+                  <select class="select" id="constraint">
+                    <option value="time">Time</option>
+                    <option value="energy">Energy</option>
+                    <option value="fear">Fear / avoidance</option>
+                    <option value="conflict">Conflict / uncertainty</option>
+                    <option value="focus">Distraction</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <label for="micro">Smallest action you can do in 2–10 minutes</label>
+                  <input class="input" id="micro" placeholder="e.g., drink water, write 3 bullets, schedule one thing…" />
+                </div>
+              </div>
+
+              <div class="hr"></div>
               <ul class="list">
-                <li class="item"><strong>Cold water</strong><span>Splash face or hold cold pack on cheeks for 20–30s.</span></li>
-                <li class="item"><strong>Movement</strong><span>30 squats or a brisk 2-minute walk.</span></li>
-                <li class="item"><strong>Orient</strong><span>Look left/right slowly. Name 5 objects. Hear 3 sounds.</span></li>
+                <li class="item"><strong>Rule</strong><span>If it takes longer than 10 minutes, shrink it until it doesn’t.</span></li>
+                <li class="item"><strong>Rule</strong><span>If you’re stuck, choose “body” and do a 2-minute activation.</span></li>
               </ul>
             </div>
           `,
-          primary: { label: "Back to Home", next: "/home" },
-          status: "Tools ready"
+          primary: { label: "Do it now", next: "/done" },
+          status: "Clarity ready"
         }
       };
 
-      function navTo(path){
-        location.hash = "#" + path;
-      }
+      function navTo(path){ location.hash = "#" + path; }
 
       function render(){
         const raw = (location.hash || "#/home").replace(/^#/, "");
@@ -490,4 +491,3 @@
   </script>
 </body>
 </html>
- 
