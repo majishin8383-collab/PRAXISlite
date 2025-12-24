@@ -1,40 +1,56 @@
-.homeGrid{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap: 12px;
-}
-@media (min-width: 760px){
-  .homeGrid{ grid-template-columns: 1fr 1fr; }
-}
+.homeStack{padding:0 16px 16px;}
 
-.actionTile{
-  display:flex;
-  flex-direction:column;
-  gap: 8px;
-  padding: 16px;
-  border-radius: var(--r);
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.04);
+.homePrimary{
+  width:100%;
+  padding:16px 14px;
+  border-radius:16px;
+  border:1px solid rgba(125,211,252,.45);
+  background: linear-gradient(135deg, rgba(125,211,252,.26), rgba(96,165,250,.14));
+  color:var(--text);
+  font-size:16px;
+  font-weight:900;
   cursor:pointer;
   text-align:left;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
 }
-.actionTile:active{ transform: translateY(1px); }
-
-.tileTop{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
-.tileTitle{ font-weight: 900; font-size: 16px; margin:0; }
-.tileSub{ color: var(--muted); font-size: 12px; margin: 2px 0 0; }
-
-.zoneDot{
-  width: 10px; height: 10px; border-radius: 999px;
-  margin-top: 4px;
+.homePrimary .hint{
+  display:block;
+  margin-top:6px;
+  color:var(--muted);
+  font-weight:700;
+  font-size:13px;
+  line-height:1.25;
 }
-.dotGreen{ background: var(--green); }
-.dotYellow{ background: var(--yellow); }
-.dotRed{ background: var(--red); }
 
-.tileHint{ color: var(--muted); font-size: 12px; margin:0; line-height:1.4; }
+.homeGrid{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:12px;
+  margin-top:12px;
+}
+@media (min-width: 860px){
+  .homeGrid{ grid-template-columns: repeat(3, 1fr); }
+}
 
-.homeTop{
-  display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
-  margin-bottom: 14px;
+.homeBtn{
+  padding:16px 14px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background: rgba(255,255,255,.04);
+  color:var(--text);
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+  text-align:left;
+  box-shadow: 0 10px 24px rgba(0,0,0,.25);
+  min-height:86px;
+}
+.homeBtn:hover{border-color: rgba(125,211,252,.35);}
+.homeBtn .hint{
+  display:block;
+  margin-top:6px;
+  color:var(--muted);
+  font-weight:700;
+  font-size:13px;
+  line-height:1.25;
 }
