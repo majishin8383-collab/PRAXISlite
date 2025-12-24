@@ -2,41 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#0b0f14" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Praxis</title>
 
-  <!-- IMPORTANT: correct stylesheet path -->
-  <link rel="stylesheet" href="./styles/base.css?v=2025-12-24-01" />
+  <!-- CSS -->
+  <link rel="stylesheet" href="./styles/base.css" />
+  <link rel="stylesheet" href="./styles/components.css" />
+  <link rel="stylesheet" href="./styles/home.css" />
+  <link rel="stylesheet" href="./styles/flows.css" />
+  <link rel="stylesheet" href="./styles/redzone.css" />
 </head>
+
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <div class="logo" aria-hidden="true">P</div>
-      <div class="brandText">
-        <div class="brandTitle">Praxis</div>
-        <div class="brandSub" id="versionLine">Loading…</div>
+  <div id="app" class="app">
+
+    <header class="appHeader">
+      <div class="brand">
+        <div class="brandTitle">PRAXIS</div>
+        <div class="brandSub">Stabilize → Act → Move forward</div>
       </div>
-    </div>
 
-    <nav class="tabs" aria-label="Primary">
-      <button class="tab" data-route="home">Home</button>
-      <button class="tab" data-route="step1">Reset</button>
-      <button class="tab" data-route="step2">Calm</button>
-      <button class="tab" data-route="step3">Stop Urge</button>
-      <button class="tab" data-route="step4">Move Forward</button>
-    </nav>
-  </header>
+      <nav class="topNav">
+        <button class="linkBtn" id="navHome" type="button">Reset</button>
+      </nav>
+    </header>
 
-  <main class="wrap" id="app" aria-live="polite"></main>
+    <main id="main" class="main" role="main" aria-live="polite">
+      <!-- JS renders here -->
+    </main>
 
-  <footer class="footer">
-    <div class="footerInner">
-      <button class="ghost" id="btn-export" type="button">Export Log</button>
-      <button class="ghost" id="btn-clear" type="button">Clear Data</button>
-    </div>
-  </footer>
+    <footer class="footer">
+      <div class="footerNote">
+        You don’t have to figure everything out. Just take the next step.
+      </div>
+    </footer>
 
-  <script defer src="./app.js?v=2025-12-24-01"></script>
+  </div>
+
+  <!-- JS (auto cache-bust for mobile dev) -->
+  <script type="module">
+    import(`./js/app.js?v=${Date.now()}`);
+  </script>
 </body>
 </html>
