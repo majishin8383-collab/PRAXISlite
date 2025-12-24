@@ -1,5 +1,1 @@
-.redzone{
-  border: 1px solid rgba(251,113,133,.25);
-  background: linear-gradient(180deg, rgba(251,113,133,.12), rgba(255,255,255,.03));
-}
-.redTitle{ font-weight: 900; }
+/* reserved for redzone/emergency emphasis if needed */
