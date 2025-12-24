@@ -1,0 +1,40 @@
+.homeGrid{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+@media (min-width: 760px){
+  .homeGrid{ grid-template-columns: 1fr 1fr; }
+}
+
+.actionTile{
+  display:flex;
+  flex-direction:column;
+  gap: 8px;
+  padding: 16px;
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.04);
+  cursor:pointer;
+  text-align:left;
+}
+.actionTile:active{ transform: translateY(1px); }
+
+.tileTop{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+.tileTitle{ font-weight: 900; font-size: 16px; margin:0; }
+.tileSub{ color: var(--muted); font-size: 12px; margin: 2px 0 0; }
+
+.zoneDot{
+  width: 10px; height: 10px; border-radius: 999px;
+  margin-top: 4px;
+}
+.dotGreen{ background: var(--green); }
+.dotYellow{ background: var(--yellow); }
+.dotRed{ background: var(--red); }
+
+.tileHint{ color: var(--muted); font-size: 12px; margin:0; line-height:1.4; }
+
+.homeTop{
+  display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+  margin-bottom: 14px;
+}
