@@ -8,7 +8,6 @@ import { renderStopUrge } from "./zones/yellow/stopUrge.js";
 
 import { renderEmergency } from "./zones/red/emergency.js";
 
-// Reset = Home
 const routes = new Map([
   ["#/home", () => renderHome()],
   ["#/green/focus", () => renderFocusSprint()],
@@ -30,11 +29,8 @@ function onRouteChange() {
 }
 
 export function initRouter() {
-  const homeBtn = document.getElementById("navHome");
-  homeBtn?.addEventListener("click", () => (location.hash = "#/home"));
-
+  document.getElementById("navHome")?.addEventListener("click", () => (location.hash = "#/home"));
   if (!location.hash) location.hash = "#/home";
-
   window.addEventListener("hashchange", onRouteChange);
   onRouteChange();
 }
