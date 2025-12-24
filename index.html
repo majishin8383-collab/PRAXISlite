@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PRAXIS</title>
+  <title>Praxis</title>
 
   <link rel="stylesheet" href="./styles/base.css" />
   <link rel="stylesheet" href="./styles/components.css" />
@@ -22,7 +22,7 @@
       </div>
 
       <nav class="topNav">
-        <button class="linkBtn" id="navHome" type="button">Home</button>
+        <button class="linkBtn" id="navHome" type="button">Reset</button>
       </nav>
     </header>
 
@@ -36,7 +36,6 @@
 
   </div>
 
-  <!-- On-screen error reporter + safe loader (mobile-friendly) -->
   <script>
     (function () {
       const main = document.getElementById("main");
@@ -51,30 +50,15 @@
         `;
       }
 
-      window.addEventListener("error", (e) => {
-        showError("Praxis Error", e.message || "Unknown error");
-      });
-
+      window.addEventListener("error", (e) => showError("Praxis Error", e.message || "Unknown error"));
       window.addEventListener("unhandledrejection", (e) => {
         const msg = (e.reason && e.reason.message) ? e.reason.message : String(e.reason);
         showError("Praxis Error", msg);
       });
 
       (async () => {
-        try {
-          await import("./js/app.js");
-
-          setTimeout(() => {
-            if (main && main.children.length === 0) {
-              showError(
-                "Praxis Loaded, but nothing rendered",
-                "This usually means a router/render function didn’t run or an early error stopped rendering."
-              );
-            }
-          }, 1200);
-        } catch (err) {
-          showError("Failed to load ./js/app.js", (err && err.message) ? err.message : String(err));
-        }
+        try { await import("./js/app.js"); }
+        catch (err) { showError("Failed to load ./js/app.js", err?.message || String(err)); }
       })();
     })();
   </script>
