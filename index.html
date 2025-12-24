@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#0b0f14" />
   <title>PRAXIS Lite</title>
-  <link rel="stylesheet" href="./styles/base.css?v=20251224a" />
+  <link rel="stylesheet" href="./styles/base.css?v=20251224b" />
 </head>
 <body>
   <header class="topbar">
@@ -44,21 +44,39 @@
         </div>
       </div>
     </section>
-
-    <section class="mini">
-      <details>
-        <summary>What is this?</summary>
-        <p class="miniText">
-          Stable GitHub Pages build using hash routing so tabs always work.
-        </p>
-      </details>
-    </section>
   </main>
 
   <footer class="footer">
     <div>© <span id="year"></span> PRAXIS Lite. All rights reserved.</div>
   </footer>
 
-  <script defer src="./app.js?v=20251224a"></script>
+  <script>
+    // If app.js fails to load, show it clearly (no console required)
+    window.__appJsLoaded = false;
+    window.addEventListener("load", () => {
+      if (!window.__appJsLoaded) {
+        const t = document.getElementById("viewTitle");
+        const s = document.getElementById("viewSubtitle");
+        const b = document.getElementById("viewBody");
+        if (t) t.textContent = "Script didn’t load";
+        if (s) s.textContent = "app.js was not found or blocked. Fix file location/name and reload.";
+        if (b) b.innerHTML = `
+          <div class="block">
+            <h3>Fix checklist</h3>
+            <ul class="list">
+              <li class="item"><strong>1)</strong><span>Confirm <kbd>app.js</kbd> exists in the repo root (same level as <kbd>index.html</kbd>).</span></li>
+              <li class="item"><strong>2)</strong><span>File name must be exactly <kbd>app.js</kbd> (case-sensitive on GitHub Pages).</span></li>
+              <li class="item"><strong>3)</strong><span>Commit + push, then hard refresh (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>R</kbd>).</span></li>
+            </ul>
+          </div>
+        `;
+      }
+    });
+  </script>
+
+  <script defer src="./app.js?v=20251224b"
+    onload="window.__appJsLoaded=true"
+    onerror="window.__appJsLoaded=false">
+  </script>
 </body>
 </html>
