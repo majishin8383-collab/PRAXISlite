@@ -22,19 +22,23 @@ function nowISO() {
   return new Date().toISOString();
 }
 
-// Keep scripts short, neutral, and non-escalatory.
+// UNIVERSAL scripts (no relationship / coparent specificity)
 const SCRIPTS = [
   {
-    label: "Copy & Send: Later",
-    text: "Got your message. I’m not available to talk right now. I’ll reply later."
+    label: "Copy & Send: Not available",
+    text: "Got your message. I’m not available right now. I’ll reply later."
   },
   {
     label: "Copy & Send: Boundary",
     text: "I’m taking space right now and won’t be engaging. Please respect that."
   },
   {
-    label: "Copy & Send: Coparent only",
-    text: "I can discuss anything related to our child. Anything else I’m not engaging with."
+    label: "Copy & Send: Keep it short",
+    text: "I hear you. I’m not discussing this right now."
+  },
+  {
+    label: "Copy & Send: Scheduling only",
+    text: "I can discuss logistics. Anything else I’m not engaging with."
   }
 ];
 
@@ -150,8 +154,9 @@ export function renderNoContact() {
   function pausePanel() {
     if (!running) {
       return el("div", { class: "flowShell" }, [
-        el("div", { class: "badge" }, ["You do not need to decide anything yet."]),
-        el("p", { class: "p" }, ["Start a pause. Don’t send anything during it. Let the urge peak and fall without feeding it."]),
+        // LIVE STAMP (so you can confirm you’re not seeing old copy)
+        el("div", { class: "badge" }, ["STOP URGE v2 ✅"]),
+        el("p", { class: "p" }, ["You do not need to decide anything yet. Start a pause and do nothing else during it."]),
         el("div", { class: "btnRow" }, [
           el("button", { class: "btn btnPrimary", type: "button", onClick: () => startPause(2) }, ["Start pause (2 min)"]),
           el("button", { class: "btn", type: "button", onClick: () => startPause(5) }, ["Pause (5 min)"]),
@@ -171,7 +176,7 @@ export function renderNoContact() {
       ]),
       el("p", { class: "small" }, ["If you feel compelled, use a script instead of improvising."]),
       el("div", { class: "btnRow" }, [
-        el("button", { class: "btn", type: "button", onClick: () => extend(5) }, ["Continue pause (+5)"]),
+        el("button", { class: "btn", type: "button", onClick: () => extend(5) }, ["Continue (+5)"]),
         el("button", { class: "btn", type: "button", onClick: () => extend(10) }, ["Continue (+10)"]),
         el("button", {
           class: "btn",
@@ -223,13 +228,10 @@ export function renderNoContact() {
     wrap.innerHTML = "";
     wrap.appendChild(header());
 
-    const card1 = el("div", { class: "card cardPad" }, [
-      pausePanel(),
-    ]);
+    wrap.appendChild(el("div", { class: "card cardPad" }, [pausePanel()]));
+    wrap.appendChild(el("div", { class: "card cardPad" }, [scriptsPanel()]));
 
-    const card2 = el("div", { class: "card cardPad" }, [scriptsPanel()]);
-
-    const card3 = el("div", { class: "card cardPad" }, [
+    wrap.appendChild(el("div", { class: "card cardPad" }, [
       mode === "pause_done"
         ? outcomePanel()
         : mode === "logged_passed"
@@ -252,14 +254,9 @@ export function renderNoContact() {
             el("div", { class: "badge" }, ["When you’re ready"]),
             el("p", { class: "p" }, ["Start a pause. Use a script instead of improvising."]),
           ])
-    ]);
+    ]));
 
-    const logCard = el("div", { class: "card cardPad" }, [recentLogs()]);
-
-    wrap.appendChild(card1);
-    wrap.appendChild(card2);
-    wrap.appendChild(card3);
-    wrap.appendChild(logCard);
+    wrap.appendChild(el("div", { class: "card cardPad" }, [recentLogs()]));
 
     if (running) updateTimerUI();
   }
