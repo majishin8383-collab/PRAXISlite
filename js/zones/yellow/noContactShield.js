@@ -25,15 +25,15 @@ function nowISO() {
 // Keep scripts short, neutral, and non-escalatory.
 const SCRIPTS = [
   {
-    label: "Neutral: later",
+    label: "Copy & Send: Later",
     text: "Got your message. I’m not available to talk right now. I’ll reply later."
   },
   {
-    label: "Boundary",
+    label: "Copy & Send: Boundary",
     text: "I’m taking space right now and won’t be engaging. Please respect that."
   },
   {
-    label: "Coparent-only",
+    label: "Copy & Send: Coparent only",
     text: "I can discuss anything related to our child. Anything else I’m not engaging with."
   }
 ];
@@ -42,8 +42,7 @@ export function renderNoContact() {
   const wrap = el("div", { class: "flowShell" });
 
   let running = false;
-  let baseMin = 2;
-  let durationMin = baseMin;
+  let durationMin = 2;
   let endAt = 0;
   let tick = null;
 
@@ -83,7 +82,6 @@ export function renderNoContact() {
   }
 
   function extend(extraMin) {
-    // add extra minutes to the remaining time
     const remaining = clamp(endAt - Date.now(), 0, durationMin * 60 * 1000);
     const newRemaining = remaining + extraMin * 60 * 1000;
     durationMin = Math.ceil(newRemaining / (60 * 1000));
@@ -92,7 +90,6 @@ export function renderNoContact() {
   }
 
   function copyToClipboard(text) {
-    // Clipboard is sometimes blocked on mobile; we fall back to a prompt
     if (navigator.clipboard?.writeText) {
       navigator.clipboard.writeText(text).catch(() => {
         window.prompt("Copy this message:", text);
@@ -104,32 +101,32 @@ export function renderNoContact() {
 
   function logOutcome(outcome, note) {
     appendLog({
-      kind: "no_contact_shield",
+      kind: "stop_urge",
       when: nowISO(),
       minutes: durationMin,
-      outcome, // "passed" | "still_present"
+      outcome, // "passed" | "still_there"
       note
     });
   }
 
-  function recentShieldLogs() {
-    const log = readLog().filter(e => e.kind === "no_contact_shield").slice(0, 6);
+  function recentLogs() {
+    const log = readLog().filter(e => e.kind === "stop_urge").slice(0, 6);
 
     if (!log.length) {
       return el("div", {}, [
-        el("h2", { class: "h2" }, ["Recent shield sessions"]),
-        el("p", { class: "p" }, ["No entries yet. Use the shield once to create history automatically."]),
+        el("h2", { class: "h2" }, ["Recent uses"]),
+        el("p", { class: "p" }, ["No entries yet. Use Stop the Urge once to create history automatically."]),
       ]);
     }
 
     return el("div", {}, [
-      el("h2", { class: "h2" }, ["Recent shield sessions"]),
+      el("h2", { class: "h2" }, ["Recent uses"]),
       ...log.map(e =>
         el("div", { style: "padding:10px 0;border-bottom:1px solid var(--line);" }, [
-          el("div", { style: "font-weight:900;" }, ["No-Contact Shield"]),
+          el("div", { style: "font-weight:900;" }, ["Stop the Urge"]),
           el("div", { class: "small" }, [
             `${new Date(e.when).toLocaleString()} • ${e.minutes ?? ""} min • ${
-              e.outcome === "passed" ? "Urge passed" : "Urge still present"
+              e.outcome === "passed" ? "Urge passed" : "Still there"
             }`
           ]),
           e.note ? el("div", { class: "small" }, [e.note]) : null,
@@ -141,56 +138,54 @@ export function renderNoContact() {
   function header() {
     return el("div", { class: "flowHeader" }, [
       el("div", {}, [
-        el("h1", { class: "h1" }, ["No-Contact Shield"]),
-        el("p", { class: "p" }, ["Pause the urge. Add friction. Protect your future self."]),
+        el("h1", { class: "h1" }, ["Stop the Urge"]),
+        el("p", { class: "p" }, ["Pause before acting."]),
       ]),
       el("div", { class: "flowMeta" }, [
-        el("button", { class: "linkBtn", type: "button", onClick: () => (location.hash = "#/home") }, ["Back"]),
+        el("button", { class: "linkBtn", type: "button", onClick: () => (location.hash = "#/home") }, ["Reset"]),
       ])
     ]);
   }
 
-  function timerPanel() {
+  function pausePanel() {
     if (!running) {
       return el("div", { class: "flowShell" }, [
-        el("div", { class: "badge" }, ["Default pause: 2 minutes"]),
-        el("p", { class: "p" }, [
-          "Your job is simple: don’t send anything during the pause. Let the urge peak and fall."
-        ]),
+        el("div", { class: "badge" }, ["You do not need to decide anything yet."]),
+        el("p", { class: "p" }, ["Start a pause. Don’t send anything during it. Let the urge peak and fall without feeding it."]),
         el("div", { class: "btnRow" }, [
-          el("button", { class: "btn btnPrimary", type: "button", onClick: () => startPause(2) }, ["Start 2-minute pause"]),
-          el("button", { class: "btn", type: "button", onClick: () => startPause(5) }, ["Start 5 min"]),
-          el("button", { class: "btn", type: "button", onClick: () => startPause(10) }, ["Start 10 min"]),
+          el("button", { class: "btn btnPrimary", type: "button", onClick: () => startPause(2) }, ["Start pause (2 min)"]),
+          el("button", { class: "btn", type: "button", onClick: () => startPause(5) }, ["Pause (5 min)"]),
+          el("button", { class: "btn", type: "button", onClick: () => startPause(10) }, ["Pause (10 min)"]),
         ]),
-        el("p", { class: "small" }, ["This is about delay, not perfection."]),
+        el("p", { class: "small" }, ["Urges rise and fall if you don’t feed them."]),
       ]);
     }
 
     const remaining = clamp(endAt - Date.now(), 0, durationMin * 60 * 1000);
 
     return el("div", { class: "timerBox" }, [
-      el("div", { class: "badge" }, [`Shield active • ${durationMin} min window`]),
+      el("div", { class: "badge" }, [`Pause active • ${durationMin} min`]),
       el("div", { class: "timerReadout", "data-timer-readout": "1" }, [formatMMSS(remaining)]),
       el("div", { class: "progressBar" }, [
         el("div", { class: "progressFill", "data-progress-fill": "1" }, []),
       ]),
+      el("p", { class: "small" }, ["If you feel compelled, use a script instead of improvising."]),
       el("div", { class: "btnRow" }, [
-        el("button", { class: "btn", type: "button", onClick: () => extend(5) }, ["+5 min"]),
-        el("button", { class: "btn", type: "button", onClick: () => extend(10) }, ["+10 min"]),
+        el("button", { class: "btn", type: "button", onClick: () => extend(5) }, ["Continue pause (+5)"]),
+        el("button", { class: "btn", type: "button", onClick: () => extend(10) }, ["Continue (+10)"]),
         el("button", {
           class: "btn",
           type: "button",
-          onClick: () => { running = false; stopTick(); rerender("stopped"); }
+          onClick: () => { running = false; stopTick(); rerender("idle"); }
         }, ["Stop"]),
       ]),
-      el("p", { class: "small" }, ["If you feel compelled, copy a script instead of improvising."]),
     ]);
   }
 
   function scriptsPanel() {
     return el("div", { class: "flowShell" }, [
-      el("h2", { class: "h2" }, ["Scripts (tap to copy)"]),
-      el("p", { class: "p" }, ["No thinking. No explaining. Keep it short."]),
+      el("h2", { class: "h2" }, ["Use a script instead of improvising"]),
+      el("p", { class: "p" }, ["Copy & send. Keep it short. No explaining."]),
       el("div", { class: "btnRow" }, SCRIPTS.map(s =>
         el("button", {
           class: "btn",
@@ -199,67 +194,67 @@ export function renderNoContact() {
         }, [s.label])
       )),
       el("div", { class: "card cardPad" }, [
-        el("div", { class: "small" }, ["Tip: If you can’t copy on mobile, it will pop up so you can copy manually."])
+        el("div", { class: "small" }, ["Using a script protects your future self."]),
       ])
     ]);
   }
 
   function outcomePanel() {
     return el("div", { class: "flowShell" }, [
-      el("h2", { class: "h2" }, ["After the pause"]),
-      el("p", { class: "p" }, ["Choose the truth. This keeps Praxis honest and useful."]),
+      el("h2", { class: "h2" }, ["Pause complete"]),
+      el("p", { class: "p" }, ["Choose what’s true right now."]),
       el("div", { class: "btnRow" }, [
         el("button", {
           class: "btn btnPrimary",
           type: "button",
-          onClick: () => { logOutcome("passed", "Urge passed."); rerender("logged"); }
-        }, ["Urge passed"]),
+          onClick: () => { logOutcome("passed", "The urge passed."); rerender("logged_passed"); }
+        }, ["The urge passed"]),
         el("button", {
           class: "btn",
           type: "button",
-          onClick: () => { logOutcome("still_present", "Urge still present."); rerender("logged"); }
-        }, ["Still present"]),
+          onClick: () => { logOutcome("still_there", "It’s still there."); rerender("logged_still"); }
+        }, ["It’s still there"]),
       ]),
-      el("p", { class: "small" }, ["If it’s still present: extend the pause, then choose again."]),
+      el("p", { class: "small" }, ["If it’s still there: add more distance with a longer pause."]),
     ]);
   }
 
   function rerender(mode) {
     wrap.innerHTML = "";
     wrap.appendChild(header());
-    wrap.appendChild(el("div", { class: "badge" }, ["NO-CONTACT SHIELD v1 ✅"]));
 
     const card1 = el("div", { class: "card cardPad" }, [
-      el("h2", { class: "h2" }, ["Shield"]),
-      timerPanel(),
+      pausePanel(),
     ]);
 
     const card2 = el("div", { class: "card cardPad" }, [scriptsPanel()]);
 
     const card3 = el("div", { class: "card cardPad" }, [
       mode === "pause_done"
+        ? outcomePanel()
+        : mode === "logged_passed"
         ? el("div", {}, [
-            el("div", { class: "badge" }, ["Pause complete"]),
-            el("p", { class: "p" }, ["Good. Now choose what’s true right now."]),
-            outcomePanel(),
-          ])
-        : mode === "logged"
-        ? el("div", {}, [
-            el("div", { class: "badge" }, ["Saved"]),
-            el("p", { class: "p" }, ["Logged. Return Home or run the shield again."]),
+            el("div", { class: "badge" }, ["Good. You didn’t act. That matters."]),
             el("div", { class: "btnRow" }, [
-              el("button", { class: "btn btnPrimary", type: "button", onClick: () => (location.hash = "#/home") }, ["Back to Home"]),
-              el("button", { class: "btn", type: "button", onClick: () => rerender("idle") }, ["Run shield again"]),
+              el("button", { class: "btn btnPrimary", type: "button", onClick: () => (location.hash = "#/home") }, ["Reset"]),
+              el("button", { class: "btn", type: "button", onClick: () => (location.hash = "#/green/move") }, ["Move Forward"]),
+            ]),
+          ])
+        : mode === "logged_still"
+        ? el("div", {}, [
+            el("div", { class: "badge" }, ["That’s okay. Add more distance."]),
+            el("div", { class: "btnRow" }, [
+              el("button", { class: "btn btnPrimary", type: "button", onClick: () => startPause(5) }, ["Continue pause (5 min)"]),
+              el("button", { class: "btn", type: "button", onClick: () => startPause(10) }, ["Continue pause (10 min)"]),
             ]),
           ])
         : el("div", {}, [
             el("div", { class: "badge" }, ["When you’re ready"]),
-            el("p", { class: "p" }, ["Start a pause. If needed, use a script."]),
-            el("p", { class: "small" }, ["Outcome selection appears when the timer ends."]),
+            el("p", { class: "p" }, ["Start a pause. Use a script instead of improvising."]),
           ])
     ]);
 
-    const logCard = el("div", { class: "card cardPad" }, [recentShieldLogs()]);
+    const logCard = el("div", { class: "card cardPad" }, [recentLogs()]);
 
     wrap.appendChild(card1);
     wrap.appendChild(card2);
