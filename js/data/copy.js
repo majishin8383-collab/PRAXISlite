@@ -1,14 +1,20 @@
 export const COPY = {
   home: {
-    title: "What do you need right now?",
-    subtitle: "Choose one. Praxis will guide the next step.",
+    title: "Reset",
+    subtitle: "Tap one. Praxis will guide the next step.",
     actions: [
-      { title: "Calm Me Down", sub: "2 minutes", hint: "Start small. Continue longer inside the flow if needed.", zone: "yellow", to: "#/yellow/calm" },
-      { title: "Focus Sprint", sub: "10–25 minutes", hint: "A timer-based sprint to convert intention into action.", zone: "green", to: "#/green/focus" },
-      { title: "No-Contact Shield", sub: "Pause the urge", hint: "Add friction. Regulate. Choose what protects you.", zone: "yellow", to: "#/yellow/nocontact" },
-      { title: "Today’s Plan", sub: "3 steps only", hint: "Not a to-do list. Just the next three moves.", zone: "green", to: "#/green/today" },
-      { title: "Reflect (Optional)", sub: "Only if helpful", hint: "Voice or short note. Never required.", zone: "green", to: "#/reflect" },
-      { title: "Emergency", sub: "Immediate help", hint: "Crisis Interruption Mode. Pause action and reach support.", zone: "red", to: "#/red/emergency" },
+      // Interrupt / Stabilize (always first)
+      { title: "Calm Me Down", sub: "Lower intensity", hint: "Do nothing else for 2 minutes.", zone: "yellow", to: "#/yellow/calm" },
+      { title: "Stop the Urge", sub: "Pause before acting", hint: "You don’t need to decide anything yet.", zone: "yellow", to: "#/yellow/nocontact" },
+      { title: "Emergency", sub: "Immediate support", hint: "Interrupt before harm. Reach support now.", zone: "red", to: "#/red/emergency" },
+
+      // Re-Enter / Act
+      { title: "Move Forward", sub: "Body first. Then progress.", hint: "Pick one. Don’t overthink it.", zone: "green", to: "#/green/move" },
+      { title: "Choose Today’s Direction", sub: "Pick a lane for today", hint: "You can change this later.", zone: "green", to: "#/green/direction" },
+      { title: "Find Your Next Step", sub: "One clear move forward", hint: "Which feels closest right now?", zone: "green", to: "#/green/next" },
+
+      // Optional (kept available but not emphasized)
+      { title: "Clarify the Next Move", sub: "One or two sentences", hint: "Skip if it makes things worse.", zone: "green", to: "#/reflect" },
     ]
   }
 };
