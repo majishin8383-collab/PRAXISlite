@@ -1,4 +1,3 @@
-import { navigate } from "./router.js";
 import { COPY } from "./data/copy.js";
 
 export function setMain(node) {
@@ -25,6 +24,10 @@ function el(tag, attrs = {}, children = []) {
   return node;
 }
 
+function go(hash) {
+  location.hash = hash; // simple navigation, no imports
+}
+
 function tile(a) {
   const dotClass =
     a.zone === "green" ? "dotGreen" :
@@ -34,7 +37,7 @@ function tile(a) {
   return el("button", {
     class: "actionTile",
     type: "button",
-    onClick: () => navigate(a.to),
+    onClick: () => go(a.to),
   }, [
     el("div", { class: "tileTop" }, [
       el("div", {}, [
