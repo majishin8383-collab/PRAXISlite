@@ -13,10 +13,6 @@ const routes = new Map([
   ["#/red/emergency", () => renderEmergency()],
 ]);
 
-export function navigate(hash) {
-  location.hash = hash;
-}
-
 function getRoute() {
   const hash = location.hash || "#/home";
   return routes.get(hash) || routes.get("#/home");
@@ -25,15 +21,13 @@ function getRoute() {
 function onRouteChange() {
   const view = getRoute()();
   setMain(view);
-  window.scrollTo({ top: 0, behavior: "instant" });
+  window.scrollTo(0, 0);
 }
 
 export function initRouter() {
-  // Top nav Home button
   const homeBtn = document.getElementById("navHome");
-  homeBtn?.addEventListener("click", () => navigate("#/home"));
+  homeBtn?.addEventListener("click", () => (location.hash = "#/home"));
 
-  // Ensure we always have a route
   if (!location.hash) location.hash = "#/home";
 
   window.addEventListener("hashchange", onRouteChange);
