@@ -1,47 +1,39 @@
 // js/lite/app.js
 import { router } from "./router.js";
+
 import { screenHome } from "./screens.home.js";
 import { screenStabilize } from "./screens.stabilize.js";
-import { screenAct } from "./screens.act.js";
+import { screenStopUrge } from "./screens.stopurge.js";
+import { screenEmergency } from "./screens.emergency.js";
 import { screenMoveForward } from "./screens.moveforward.js";
 
 const SCREENS = {
   home: screenHome,
   stabilize: screenStabilize,
-  act: screenAct,
+  stopurge: screenStopUrge,
+  emergency: screenEmergency,
   moveforward: screenMoveForward,
 };
 
-function ensureShell() {
+function getHook(name) {
+  return (window.__LITE_HOOKS && window.__LITE_HOOKS[name]) || null;
+}
+
+function render(route) {
   const main = document.getElementById("main");
-  if (!main) throw new Error("Missing #main container");
-  return main;
-}
-
-function setResetBehavior() {
-  const btn = document.getElementById("navHome");
-  if (!btn) return;
-  btn.onclick = () => router.go("home");
-}
-
-function render(name) {
-  const main = ensureShell();
-  const fn = SCREENS[name] || SCREENS.home;
+  const fn = SCREENS[route] || SCREENS.home;
   main.innerHTML = fn();
-  main.scrollTop = 0;
 
-  // Screen-specific wiring (optional hooks)
-  const hook = window.__LITE_HOOKS?.[name];
-  try { hook?.(main, router); } catch (e) { console.warn(e); }
+  // Screen hook (wires buttons)
+  const hook = getHook(route);
+  if (hook) hook(main, router);
+
+  // Reset button
+  const reset = document.getElementById("navHome");
+  if (reset) reset.onclick = () => router.go("home");
 }
 
-function init() {
-  setResetBehavior();
-
-  router.init({
-    defaultRoute: "home",
-    onRoute: (routeName) => render(routeName),
-  });
-}
-
-init();
+router.init({
+  defaultRoute: "home",
+  onRoute: render,
+});
