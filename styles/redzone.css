@@ -1,1 +1,4 @@
-/* reserved for redzone/emergency emphasis if needed */
+.redzone{
+  border-color:rgba(255,77,77,.30);
+  background:linear-gradient(180deg, rgba(255,77,77,.10), rgba(255,255,255,.03));
+}
