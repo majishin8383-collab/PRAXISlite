@@ -1,4 +1,5 @@
 // js/lite/screens.act.js
+
 const QUESTIONS = [
   "Have I slept at least 5 hours in the last 24 hours?",
   "Have I eaten a real meal in the last 8 hours?",
@@ -12,80 +13,112 @@ const QUESTIONS = [
   "Will engaging right now make things measurably better within 48 hours?"
 ];
 
-function resultFrom(answers) {
-  // Simple scoring:
-  // "No" on basic stability (sleep/food) increases risk
-  // "Yes" to harm/repeat increases risk
-  // "Yes" to alcohol/substances increases risk
-  // "No" to reversible / information increases risk
+function computeResult(answers) {
+  // answers: "yes" | "no"
   let risk = 0;
 
-  // Q1 sleep
-  if (answers[0] === "no") risk += 2;
-  // Q2 meal
-  if (answers[1] === "no") risk += 2;
-  // Q3 substances
-  if (answers[2] === "yes") risk += 2;
+  // Stability basics (no = risk)
+  if (answers[0] === "no") risk += 2; // sleep
+  if (answers[1] === "no") risk += 2; // food
+  if (answers[2] === "yes") risk += 2; // substances
 
-  // Q4 repeated harm
+  // Pattern harm
   if (answers[3] === "yes") risk += 2;
 
-  // Q5 asked clearly (no increases risk slightly)
+  // Communication done (no = slight risk)
   if (answers[4] === "no") risk += 1;
 
-  // Q6 real time pressure (yes decreases risk slightly; it can justify action)
+  // Real deadline (yes = slight reduce)
   if (answers[5] === "yes") risk -= 1;
 
-  // Q7 reversible (no increases risk)
+  // Reversible (no = risk)
   if (answers[6] === "no") risk += 2;
 
-  // Q8 would advise pause (yes increases risk)
+  // Would advise pause (yes = risk)
   if (answers[7] === "yes") risk += 2;
 
-  // Q9 enough info (no increases risk)
+  // Enough info (no = risk)
   if (answers[8] === "no") risk += 2;
 
-  // Q10 engaging helps in 48h (no increases risk)
+  // Engagement helps (no = risk)
   if (answers[9] === "no") risk += 2;
 
-  // Clamp
   risk = Math.max(0, Math.min(14, risk));
 
-  if (risk >= 9) return { verdict: "DISENGAGE", note: "Do not engage today. Protect your peace. Revisit after recovery and time." };
-  if (risk >= 5) return { verdict: "PAUSE", note: "Pause. Stabilize first. Set a time to revisit with a clearer head." };
-  return { verdict: "PROCEED", note: "Proceed calmly with one clear step. Keep it short and factual." };
+  if (risk >= 9) return { verdict: "DISENGAGE", dot: "dotRed", note: "Do not engage today. Protect your peace. Revisit after recovery and time." };
+  if (risk >= 5) return { verdict: "PAUSE", dot: "dotYellow", note: "Pause. Stabilize first. Set a time to revisit with a clearer head." };
+  return { verdict: "PROCEED", dot: "dotGreen", note: "Proceed calmly with one clear step. Keep it short and factual." };
 }
 
 export function screenAct() {
   const qHtml = QUESTIONS.map((q, i) => `
-    <div class="qRow" data-q="${i}">
-      <div class="qText"><strong>${i + 1}.</strong> ${q}</div>
-      <div class="qBtns">
-        <button class="pillBtn" data-a="yes" type="button">Yes</button>
-        <button class="pillBtn" data-a="no" type="button">No</button>
+    <div class="tile dosTile" data-q="${i}" role="group" aria-label="DOS question ${i + 1}">
+      <div class="tileMain">
+        <div class="tileTitle">${i + 1}. ${q}</div>
+        <div class="tileSub">One tap. No debating.</div>
+
+        <div class="segRow" role="radiogroup" aria-label="Answer yes or no">
+          <button class="segBtn" data-a="yes" type="button" aria-pressed="false">Yes</button>
+          <button class="segBtn" data-a="no" type="button" aria-pressed="false">No</button>
+        </div>
       </div>
+      <span class="tileDot dotBlue" aria-hidden="true"></span>
     </div>
   `).join("");
 
   return `
     <section class="card">
-      <h2 class="h2">Act (DOS Lite)</h2>
+      <h2 class="h2">Act (DOS)</h2>
       <p class="muted">Answer honestly. The system returns the safest next move.</p>
+    </section>
 
-      <div id="dos" class="dos">
+    <section class="card" style="margin-top:14px;">
+      <div class="tileStack" id="dos">
         ${qHtml}
       </div>
 
-      <div class="btnRow" style="margin-top:12px;">
-        <button class="ghostBtn" data-go="home" type="button">Back</button>
-        <button class="primaryBtn" id="dosSubmit" type="button" disabled>Get Result</button>
+      <div class="tileStack" style="margin-top:14px;">
+        <button class="tile" data-go="home" type="button">
+          <div class="tileMain">
+            <div class="tileTitle">Back</div>
+            <div class="tileSub">Return to start.</div>
+            <div class="tileHint">Tap</div>
+          </div>
+          <span class="tileDot dotBlue" aria-hidden="true"></span>
+        </button>
+
+        <button class="tile tileDisabled" id="dosSubmit" type="button" disabled>
+          <div class="tileMain">
+            <div class="tileTitle">Get Result</div>
+            <div class="tileSub">Complete all answers first.</div>
+            <div class="tileHint">Tap</div>
+          </div>
+          <span class="tileDot dotYellow" aria-hidden="true"></span>
+        </button>
       </div>
 
-      <div id="dosResult" class="card" style="margin-top:12px; display:none;"></div>
+      <div id="dosResultWrap" style="margin-top:14px; display:none;">
+        <div class="tile tileStatic" id="dosResult"></div>
+      </div>
 
-      <div class="btnRow" style="margin-top:12px;">
-        <button class="ghostBtn" data-go="stabilize" type="button">Re-stabilize</button>
-        <button class="primaryBtn" data-go="moveforward" type="button">Next: Move Forward</button>
+      <div class="tileStack" style="margin-top:14px;">
+        <button class="tile" data-go="stabilize" type="button">
+          <div class="tileMain">
+            <div class="tileTitle">Re-stabilize</div>
+            <div class="tileSub">Lower intensity first.</div>
+            <div class="tileHint">Tap</div>
+          </div>
+          <span class="tileDot dotGreen" aria-hidden="true"></span>
+        </button>
+
+        <button class="tile" data-go="moveforward" type="button">
+          <div class="tileMain">
+            <div class="tileTitle">Next: Move Forward</div>
+            <div class="tileSub">Do one small useful thing.</div>
+            <div class="tileHint">Tap</div>
+          </div>
+          <span class="tileDot dotBlue" aria-hidden="true"></span>
+        </button>
       </div>
     </section>
   `;
@@ -99,43 +132,58 @@ window.__LITE_HOOKS.act = (root, router) => {
 
   const answers = Array(QUESTIONS.length).fill(null);
   const submit = root.querySelector("#dosSubmit");
+  const resultWrap = root.querySelector("#dosResultWrap");
   const resultBox = root.querySelector("#dosResult");
 
   function updateSubmit() {
     const done = answers.every(Boolean);
     submit.disabled = !done;
+    submit.classList.toggle("tileDisabled", !done);
+    submit.querySelector(".tileSub").textContent = done ? "Tap to compute your safest next move." : "Complete all answers first.";
   }
 
-  root.querySelectorAll(".qRow").forEach((row) => {
-    const idx = Number(row.getAttribute("data-q"));
-    const btns = row.querySelectorAll("[data-a]");
-    btns.forEach((b) => {
-      b.addEventListener("click", () => {
-        const val = b.getAttribute("data-a"); // yes/no
-        answers[idx] = val;
+  root.querySelectorAll(".dosTile").forEach((tile) => {
+    const idx = Number(tile.getAttribute("data-q"));
+    const yesBtn = tile.querySelector('[data-a="yes"]');
+    const noBtn = tile.querySelector('[data-a="no"]');
 
-        // UI selection
-        btns.forEach(x => x.classList.remove("isSelected"));
-        b.classList.add("isSelected");
+    function setSelected(val) {
+      answers[idx] = val;
 
-        updateSubmit();
-      });
-    });
+      // visual selection
+      yesBtn.classList.toggle("isSelected", val === "yes");
+      noBtn.classList.toggle("isSelected", val === "no");
+
+      // aria pressed
+      yesBtn.setAttribute("aria-pressed", String(val === "yes"));
+      noBtn.setAttribute("aria-pressed", String(val === "no"));
+
+      updateSubmit();
+    }
+
+    yesBtn.addEventListener("click", () => setSelected("yes"));
+    noBtn.addEventListener("click", () => setSelected("no"));
   });
 
   submit.addEventListener("click", () => {
-    const out = resultFrom(answers);
+    const out = computeResult(answers);
     const stamp = new Date().toISOString();
+
     try {
       localStorage.setItem("praxis_lite_last_dos", JSON.stringify({ ...out, stamp }));
     } catch {}
 
-    resultBox.style.display = "block";
+    resultWrap.style.display = "block";
+    resultBox.className = "tile tileStatic"; // reset
     resultBox.innerHTML = `
-      <h3 class="h3">Result: ${out.verdict}</h3>
-      <p class="muted" style="margin-top:6px;">${out.note}</p>
-      <p class="muted" style="margin-top:6px;"><small>Saved locally.</small></p>
+      <div class="tileMain">
+        <div class="tileTitle">Result: ${out.verdict}</div>
+        <div class="tileSub">${out.note}</div>
+        <div class="tileHint">Saved locally.</div>
+      </div>
+      <span class="tileDot ${out.dot}" aria-hidden="true"></span>
     `;
+
     resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 
