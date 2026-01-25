@@ -25,7 +25,7 @@ export function screenMoveForward() {
     <button class="tile presetTile" data-preset="${escapeHtml(p)}" type="button">
       <div class="tileMain">
         <div class="tileTitle">${p}</div>
-        <div class="tileSub">One small step.</div>
+        <div class="tileSub">Tap = saved.</div>
         <div class="tileHint">Tap</div>
       </div>
       <span class="tileDot dotGreen" aria-hidden="true"></span>
@@ -35,7 +35,7 @@ export function screenMoveForward() {
   return `
     <section class="card">
       <h2 class="h2">Move Forward</h2>
-      <p class="muted">Pick one small useful action. No fixing everything — just momentum.</p>
+      <p class="muted">One small useful action. Tap one to save instantly.</p>
     </section>
 
     <section class="card" style="margin-top:14px;">
@@ -49,13 +49,14 @@ export function screenMoveForward() {
       <div class="tile tileStatic">
         <div class="tileMain">
           <div class="tileTitle">Or write your own</div>
-          <div class="tileSub">Only if needed.</div>
+          <div class="tileSub">Optional. Press Enter to save.</div>
           <div class="tileBody" style="margin-top:10px;">
             <input
               id="mfAction"
               class="liteInput"
               maxlength="120"
               placeholder="Example: delay message 10 minutes"
+              autocomplete="off"
             />
           </div>
         </div>
@@ -63,10 +64,10 @@ export function screenMoveForward() {
       </div>
 
       <div class="tileStack" style="margin-top:14px;">
-        <button class="tile" id="mfSave" type="button">
+        <button class="tile" id="mfSaveCustom" type="button">
           <div class="tileMain">
-            <div class="tileTitle">Save</div>
-            <div class="tileSub">Lock in one step and move.</div>
+            <div class="tileTitle">Save Custom</div>
+            <div class="tileSub">Save what you typed.</div>
             <div class="tileHint">Tap</div>
           </div>
           <span class="tileDot dotYellow" aria-hidden="true"></span>
@@ -98,27 +99,19 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
   });
 
   const input = root.querySelector("#mfAction");
-  const saveBtn = root.querySelector("#mfSave");
+  const saveCustomBtn = root.querySelector("#mfSaveCustom");
   const wrap = root.querySelector("#mfSavedWrap");
   const box = root.querySelector("#mfSaved");
 
-  // Tap preset fills input (lowest friction)
-  root.querySelectorAll("[data-preset]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      input.value = btn.getAttribute("data-preset");
-      input.focus();
-    });
-  });
-
-  function save() {
-    const text = (input.value || "").trim();
-    if (!text) {
-      input.focus();
+  function saveAction(text, source) {
+    const clean = (text || "").trim();
+    if (!clean) {
+      input?.focus?.();
       return;
     }
 
     const stamp = new Date().toISOString();
-    const payload = { text, stamp };
+    const payload = { text: clean, source, stamp };
 
     try {
       localStorage.setItem("praxis_lite_last_moveforward", JSON.stringify(payload));
@@ -128,7 +121,7 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
     box.innerHTML = `
       <div class="tileMain">
         <div class="tileTitle">Saved</div>
-        <div class="tileSub"><strong>Action:</strong> ${escapeHtml(text)}</div>
+        <div class="tileSub"><strong>Action:</strong> ${escapeHtml(clean)}</div>
         <div class="tileHint">Now do the smallest first step.</div>
       </div>
       <span class="tileDot dotGreen" aria-hidden="true"></span>
@@ -136,10 +129,25 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
     box.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  saveBtn.addEventListener("click", save);
+  // Preset tap = auto-save (fewest steps)
+  root.querySelectorAll("[data-preset]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const val = btn.getAttribute("data-preset");
+      input.value = val; // visible confirmation in the field
+      saveAction(val, "preset");
+    });
+  });
 
-  // Optional: Enter key saves
+  // Custom save button
+  saveCustomBtn.addEventListener("click", () => {
+    saveAction(input.value, "custom");
+  });
+
+  // Enter key saves custom instantly
   input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") save();
+    if (e.key === "Enter") {
+      e.preventDefault();
+      saveAction(input.value, "custom");
+    }
   });
 };
