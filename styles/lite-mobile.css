@@ -1,13 +1,61 @@
 /* ===============================
    Praxis Lite — Mobile-first polish
+   + Praxis-style tile language
    =============================== */
 
-@media (max-width: 640px) {
+/* Desktop/tablet: constrain content so it feels intentional (not floating) */
+.main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding-top: 42px;
+  padding-bottom: 64px;
+}
 
-  /* App container */
-  .app {
-    padding: 0;
-  }
+/* --- Praxis Lite: match Praxis tile language ---- */
+.tileStack { display: grid; gap: 14px; }
+
+.tile {
+  width: 100%;
+  text-align: left;
+  border-radius: 18px;
+  padding: 18px 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(0,0,0,.18);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.tile:active { transform: translateY(1px); }
+
+.tileMain { display: grid; gap: 6px; }
+
+.tileTitle { font-size: 22px; font-weight: 800; letter-spacing: .02em; }
+.tileSub { opacity: .85; }
+.tileHint { opacity: .65; font-size: 13px; margin-top: 6px; }
+
+.tileDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  opacity: .95;
+}
+
+.dotGreen { background: #4cd964; }
+.dotYellow { background: #ffd60a; }
+.dotBlue { background: #0a84ff; }
+
+/* Optional: soften background dominance slightly so content wins */
+.app {
+  backdrop-filter: saturate(0.9) brightness(0.95);
+}
+
+/* ===============================
+   Mobile tweaks
+   =============================== */
+@media (max-width: 640px) {
 
   /* Header */
   .appHeader {
@@ -31,7 +79,11 @@
 
   /* Main content */
   .main {
+    max-width: 680px;
+    margin: 0 auto;
     padding: 12px;
+    padding-top: 22px;
+    padding-bottom: 40px;
   }
 
   /* Cards */
@@ -44,7 +96,7 @@
     margin-top: 12px;
   }
 
-  /* Headings */
+  /* Headings (if your CSS defines these, this just nudges mobile sizing) */
   .h1 { font-size: 20px; }
   .h2 { font-size: 18px; }
   .h3 { font-size: 15px; }
@@ -54,7 +106,11 @@
     line-height: 1.45;
   }
 
-  /* Buttons */
+  /* Tile tightening */
+  .tile { padding: 16px; border-radius: 16px; }
+  .tileTitle { font-size: 20px; }
+
+  /* Buttons (if present elsewhere) */
   .primaryBtn,
   .ghostBtn,
   .pillBtn {
@@ -63,32 +119,12 @@
     border-radius: 14px;
   }
 
-  .btnGrid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .btnRow {
-    gap: 10px;
-  }
-
   /* Inputs */
   .input {
+    width: 100%;
     padding: 14px;
     font-size: 15px;
-  }
-
-  /* DOS questions */
-  .qRow {
-    padding: 12px 0;
-  }
-
-  .qText {
-    font-size: 14px;
-  }
-
-  .qBtns {
-    margin-top: 8px;
+    border-radius: 12px;
   }
 
   /* Footer */
