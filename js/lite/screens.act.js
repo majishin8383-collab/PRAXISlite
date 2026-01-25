@@ -1,122 +1,49 @@
-// js/lite/screens.act.js
+// js/lite/screens.home.js
 
-const QUESTIONS = [
-  "Have I slept at least 5 hours in the last 24 hours?",
-  "Have I eaten a real meal in the last 8 hours?",
-  "Have I used alcohol or any substance today that could distort judgment?",
-  "Is this situation repeatedly harming my peace, health, stability, or goals?",
-  "Have I already tried the simplest respectful step once (without escalating)?",
-  "Is there a real time pressure within 24 hours (not imagined)?",
-  "Is my next step reversible if it goes poorly?",
-  "If a trusted friend described this exact situation, would I advise them to pause?",
-  "Do I have enough information to decide right now?",
-  "Will taking action right now make things measurably better within 48 hours?"
-];
-
-function computeResult(answers) {
-  // answers: "yes" | "no"
-  let risk = 0;
-
-  // Stability basics (no = risk)
-  if (answers[0] === "no") risk += 2; // sleep
-  if (answers[1] === "no") risk += 2; // food
-
-  // Substances (yes = risk)
-  if (answers[2] === "yes") risk += 2;
-
-  // Repeated harm (yes = risk)
-  if (answers[3] === "yes") risk += 2;
-
-  // Tried simplest step (no = slight risk)
-  if (answers[4] === "no") risk += 1;
-
-  // Real deadline (yes = slight reduce — may justify acting)
-  if (answers[5] === "yes") risk -= 1;
-
-  // Reversible (no = risk)
-  if (answers[6] === "no") risk += 2;
-
-  // Friend would advise pause (yes = risk)
-  if (answers[7] === "yes") risk += 2;
-
-  // Enough info (no = risk)
-  if (answers[8] === "no") risk += 2;
-
-  // Action improves 48h (no = risk)
-  if (answers[9] === "no") risk += 2;
-
-  risk = Math.max(0, Math.min(14, risk));
-
-  if (risk >= 9) return { verdict: "DISENGAGE", dot: "dotRed", note: "Do not engage today. Protect your stability. Revisit after rest, food, and time." };
-  if (risk >= 5) return { verdict: "PAUSE", dot: "dotYellow", note: "Pause. Stabilize first. Set a time to revisit with a clearer head." };
-  return { verdict: "PROCEED", dot: "dotGreen", note: "Proceed calmly with one clear step. Keep it short, simple, and values-aligned." };
-}
-
-export function screenAct() {
-  const qHtml = QUESTIONS.map((q, i) => `
-    <div class="tile dosTile" data-q="${i}" role="group" aria-label="DOS question ${i + 1}">
-      <div class="tileMain">
-        <div class="tileTitle">${i + 1}. ${q}</div>
-        <div class="tileSub">One tap. No debating.</div>
-
-        <div class="segRow" role="radiogroup" aria-label="Answer yes or no">
-          <button class="segBtn" data-a="yes" type="button" aria-pressed="false">Yes</button>
-          <button class="segBtn" data-a="no" type="button" aria-pressed="false">No</button>
-        </div>
-      </div>
-      <span class="tileDot dotBlue" aria-hidden="true"></span>
-    </div>
-  `).join("");
-
+export function screenHome() {
   return `
     <section class="card">
-      <h2 class="h2">Act (DOS)</h2>
-      <p class="muted">Answer honestly. The system returns the safest next move.</p>
+      <h1 class="h1">PRAXIS LITE</h1>
+      <p class="muted">Choose one. No explanation required.</p>
     </section>
 
     <section class="card" style="margin-top:14px;">
-      <div class="tileStack" id="dos">
-        ${qHtml}
-      </div>
+      <div class="muted" style="font-weight:700; opacity:.8; margin-bottom:2px;">Start here</div>
+      <div class="h2" style="margin:0 0 6px 0;">What do you need right now?</div>
+      <div class="muted" style="margin:0 0 12px 0;">One tap.</div>
 
-      <div class="tileStack" style="margin-top:14px;">
-        <button class="tile" data-go="home" type="button">
-          <div class="tileMain">
-            <div class="tileTitle">Back</div>
-            <div class="tileSub">Return to start.</div>
-            <div class="tileHint">Tap</div>
-          </div>
-          <span class="tileDot dotBlue" aria-hidden="true"></span>
-        </button>
-
-        <button class="tile tileDisabled" id="dosSubmit" type="button" disabled>
-          <div class="tileMain">
-            <div class="tileTitle">Get Result</div>
-            <div class="tileSub">Complete all answers first.</div>
-            <div class="tileHint">Tap</div>
-          </div>
-          <span class="tileDot dotYellow" aria-hidden="true"></span>
-        </button>
-      </div>
-
-      <div id="dosResultWrap" style="margin-top:14px; display:none;">
-        <div class="tile tileStatic" id="dosResult"></div>
-      </div>
-
-      <div class="tileStack" style="margin-top:14px;">
+      <div class="tileStack">
         <button class="tile" data-go="stabilize" type="button">
           <div class="tileMain">
-            <div class="tileTitle">Re-stabilize</div>
+            <div class="tileTitle">Stabilize</div>
             <div class="tileSub">Lower intensity first.</div>
             <div class="tileHint">Tap</div>
           </div>
           <span class="tileDot dotGreen" aria-hidden="true"></span>
         </button>
 
+        <button class="tile" data-go="stopurge" type="button">
+          <div class="tileMain">
+            <div class="tileTitle">Stop the Urge</div>
+            <div class="tileSub">Interrupt the loop.</div>
+            <div class="tileHint">Tap</div>
+          </div>
+          <span class="tileDot dotYellow" aria-hidden="true"></span>
+        </button>
+
+        <button class="tile" data-go="emergency" type="button">
+          <div class="tileMain">
+            <div class="tileTitle">Emergency</div>
+            <div class="tileSub">Outside help is allowed.</div>
+            <div class="tileHint">Tap</div>
+          </div>
+          <span class="tileDot dotRed" aria-hidden="true"></span>
+        </button>
+
         <button class="tile" data-go="moveforward" type="button">
           <div class="tileMain">
-            <div class="tileTitle">Next: Move Forward</div>
-            <div class="tileSub">Do one small useful thing.</div>
+            <div class="tileTitle">Move Forward</div>
+            <div class="tileSub">One small step.</div>
             <div class="tileHint">Tap</div>
           </div>
           <span class="tileDot dotBlue" aria-hidden="true"></span>
@@ -127,67 +54,8 @@ export function screenAct() {
 }
 
 window.__LITE_HOOKS = window.__LITE_HOOKS || {};
-window.__LITE_HOOKS.act = (root, router) => {
+window.__LITE_HOOKS.home = (root, router) => {
   root.querySelectorAll("[data-go]").forEach((btn) => {
     btn.addEventListener("click", () => router.go(btn.getAttribute("data-go")));
   });
-
-  const answers = Array(QUESTIONS.length).fill(null);
-  const submit = root.querySelector("#dosSubmit");
-  const resultWrap = root.querySelector("#dosResultWrap");
-  const resultBox = root.querySelector("#dosResult");
-
-  function updateSubmit() {
-    const done = answers.every(Boolean);
-    submit.disabled = !done;
-    submit.classList.toggle("tileDisabled", !done);
-    submit.querySelector(".tileSub").textContent = done
-      ? "Tap to compute your safest next move."
-      : "Complete all answers first.";
-  }
-
-  root.querySelectorAll(".dosTile").forEach((tile) => {
-    const idx = Number(tile.getAttribute("data-q"));
-    const yesBtn = tile.querySelector('[data-a="yes"]');
-    const noBtn = tile.querySelector('[data-a="no"]');
-
-    function setSelected(val) {
-      answers[idx] = val;
-
-      yesBtn.classList.toggle("isSelected", val === "yes");
-      noBtn.classList.toggle("isSelected", val === "no");
-
-      yesBtn.setAttribute("aria-pressed", String(val === "yes"));
-      noBtn.setAttribute("aria-pressed", String(val === "no"));
-
-      updateSubmit();
-    }
-
-    yesBtn.addEventListener("click", () => setSelected("yes"));
-    noBtn.addEventListener("click", () => setSelected("no"));
-  });
-
-  submit.addEventListener("click", () => {
-    const out = computeResult(answers);
-    const stamp = new Date().toISOString();
-
-    try {
-      localStorage.setItem("praxis_lite_last_dos", JSON.stringify({ ...out, stamp }));
-    } catch {}
-
-    resultWrap.style.display = "block";
-    resultBox.className = "tile tileStatic";
-    resultBox.innerHTML = `
-      <div class="tileMain">
-        <div class="tileTitle">Result: ${out.verdict}</div>
-        <div class="tileSub">${out.note}</div>
-        <div class="tileHint">Saved locally.</div>
-      </div>
-      <span class="tileDot ${out.dot}" aria-hidden="true"></span>
-    `;
-
-    resultBox.scrollIntoView({ behavior: "smooth", block: "start" });
-  });
-
-  updateSubmit();
 };
