@@ -1,1 +1,9 @@
-/* reserved for flow-specific styling; keeping minimal for stability */
+/* Light structural helpers for flow screens */
+.flowGrid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+@media(min-width:900px){
+  .flowGrid{grid-template-columns:1fr 1fr}
+}
