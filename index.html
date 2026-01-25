@@ -2,65 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Praxis</title>
+  <meta name="description" content="Praxis — a self-guided emotional regulation tool." />
 
-  <link rel="stylesheet" href="./styles/base.css" />
-  <link rel="stylesheet" href="./styles/components.css" />
-  <link rel="stylesheet" href="./styles/home.css" />
-  <link rel="stylesheet" href="./styles/flows.css" />
-  <link rel="stylesheet" href="./styles/redzone.css" />
+  <!-- Styles -->
+  <link rel="stylesheet" href="./styles/base.css">
+  <link rel="stylesheet" href="./styles/components.css">
+  <link rel="stylesheet" href="./styles/home.css">
+  <link rel="stylesheet" href="./styles/flows.css">
+  <link rel="stylesheet" href="./styles/redzone.css">
 </head>
 
 <body>
   <div id="app" class="app">
-
     <header class="appHeader">
       <div class="brand">
         <div class="brandTitle">PRAXIS</div>
         <div class="brandSub">Stabilize → Act → Move forward</div>
       </div>
-
       <nav class="topNav">
         <button class="linkBtn" id="navHome" type="button">Reset</button>
       </nav>
     </header>
 
-    <main id="main" class="main" role="main" aria-live="polite"></main>
+    <main id="main" class="main" role="main"></main>
 
     <footer class="footer">
-      <div class="footerNote">
-        You don’t have to figure everything out. Just take the next step.
+      <div>
+        <strong>© 2025 Joseph Satmary.</strong> All rights reserved.
+        <span class="beta">Beta — features and design are subject to change.</span>
+      </div>
+      <div>
+        <a href="./legal.html">Legal</a>
       </div>
     </footer>
-
   </div>
 
-  <script>
-    (function () {
-      const main = document.getElementById("main");
-
-      function showError(title, msg) {
-        if (!main) return;
-        main.innerHTML = `
-          <div style="padding:16px;border:1px solid rgba(255,0,0,.35);border-radius:14px;background:rgba(255,0,0,.08)">
-            <div style="font-weight:900;margin-bottom:6px">${title}</div>
-            <div style="font-family:monospace;white-space:pre-wrap">${msg}</div>
-          </div>
-        `;
-      }
-
-      window.addEventListener("error", (e) => showError("Praxis Error", e.message || "Unknown error"));
-      window.addEventListener("unhandledrejection", (e) => {
-        const msg = (e.reason && e.reason.message) ? e.reason.message : String(e.reason);
-        showError("Praxis Error", msg);
-      });
-
-      (async () => {
-        try { await import("./js/app.js"); }
-        catch (err) { showError("Failed to load ./js/app.js", err?.message || String(err)); }
-      })();
-    })();
+  <!-- ✅ Cache-busted boot -->
+  <script type="module">
+    import(`./js/app.js?v=${Date.now()}`);
   </script>
 </body>
 </html>
