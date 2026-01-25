@@ -2,7 +2,7 @@
 export function screenHome() {
   return `
     <section class="card">
-      <h1 class="h1">PRAXIS</h1>
+      <h1 class="h1">PRAXIS LITE</h1>
       <p class="muted">Start with your state. One tap.</p>
     </section>
 
@@ -21,10 +21,10 @@ export function screenHome() {
           <span class="tileDot dotGreen" aria-hidden="true"></span>
         </button>
 
-        <button class="tile" data-go="act" type="button">
+        <button class="tile" data-go="stopurge" type="button">
           <div class="tileMain">
-            <div class="tileTitle">Act (DOS)</div>
-            <div class="tileSub">Choose the safest next action.</div>
+            <div class="tileTitle">Stop the Urge</div>
+            <div class="tileSub">Interrupt the loop.</div>
             <div class="tileHint">Tap</div>
           </div>
           <span class="tileDot dotYellow" aria-hidden="true"></span>
@@ -33,10 +33,19 @@ export function screenHome() {
         <button class="tile" data-go="moveforward" type="button">
           <div class="tileMain">
             <div class="tileTitle">Move Forward</div>
-            <div class="tileSub">Do one small useful thing.</div>
+            <div class="tileSub">One small useful step.</div>
             <div class="tileHint">Tap</div>
           </div>
           <span class="tileDot dotBlue" aria-hidden="true"></span>
+        </button>
+
+        <button class="tile" data-go="emergency" type="button">
+          <div class="tileMain">
+            <div class="tileTitle">Emergency</div>
+            <div class="tileSub">Outside help is allowed.</div>
+            <div class="tileHint">Tap</div>
+          </div>
+          <span class="tileDot dotRed" aria-hidden="true"></span>
         </button>
       </div>
     </section>
@@ -47,6 +56,8 @@ export function screenHome() {
 window.__LITE_HOOKS = window.__LITE_HOOKS || {};
 window.__LITE_HOOKS.home = (root, router) => {
   root.querySelectorAll("[data-go]").forEach((btn) => {
-    btn.addEventListener("click", () => router.go(btn.getAttribute("data-go")));
+    btn.addEventListener("click", () =>
+      router.go(btn.getAttribute("data-go"))
+    );
   });
 };
