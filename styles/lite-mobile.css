@@ -1,9 +1,6 @@
-/* ===============================
-   Praxis Lite — Layout + Tiles + Inputs + Segmented Controls
-   Full replacement
-   =============================== */
+/* styles/lite-mobile.css */
 
-/* Desktop/tablet: constrain content so it feels intentional */
+/* Constrain content */
 .main {
   max-width: 720px;
   margin: 0 auto;
@@ -11,12 +8,7 @@
   padding-bottom: 64px;
 }
 
-/* Optional: soften background dominance slightly so content wins */
-.app {
-  backdrop-filter: saturate(0.9) brightness(0.95);
-}
-
-/* ---- Tile language (matches Praxis vibe) ---- */
+/* Tile stack */
 .tileStack { display: grid; gap: 14px; }
 
 .tile {
@@ -39,14 +31,7 @@
 
 .tile:active { transform: translateY(1px); }
 
-.tileStatic {
-  cursor: default;
-}
-
-.tileDisabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
+.tileStatic { cursor: default; }
 
 .tileMain { display: grid; gap: 6px; }
 
@@ -70,65 +55,12 @@
 .dotBlue { background: #0a84ff; }
 .dotRed { background: #ff453a; }
 
-/* Lists inside tiles */
+/* Lists */
 .liteList { margin: 10px 0 0 18px; }
 .liteList li { margin: 4px 0; }
 
-/* ---- Input styling (so it doesn’t look like a desktop textbox) ---- */
-.liteInput {
-  width: 100%;
-  padding: 14px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.20);
-  color: inherit;
-  font-size: 15px;
-  outline: none;
-}
-
-.liteInput::placeholder { opacity: .65; }
-
-/* ---- Segmented Yes/No controls (Praxis-style) ---- */
-.segRow {
-  margin-top: 10px;
-  display: inline-grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  max-width: 260px;
-}
-
-.segBtn {
-  padding: 10px 14px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.18);
-  color: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  appearance: none;
-  outline: none;
-}
-
-.segBtn.isSelected {
-  border-color: rgba(255,255,255,.35);
-  background: rgba(255,255,255,.10);
-  box-shadow: 0 0 0 2px rgba(255,255,255,.08) inset;
-}
-
-.segBtn:active { transform: translateY(1px); }
-
-/* ===============================
-   Mobile tweaks
-   =============================== */
+/* Mobile */
 @media (max-width: 640px) {
-  .appHeader { padding: 10px 14px; }
-
-  .brandTitle { font-size: 18px; letter-spacing: 0.06em; }
-  .brandSub { font-size: 12px; opacity: 0.85; }
-
-  .topNav .linkBtn { font-size: 13px; padding: 6px 10px; }
-
   .main {
     max-width: 680px;
     margin: 0 auto;
@@ -137,20 +69,6 @@
     padding-bottom: 40px;
   }
 
-  .card {
-    padding: 14px;
-    border-radius: 14px;
-  }
-
   .tile { padding: 16px; border-radius: 16px; }
   .tileTitle { font-size: 20px; }
-
-  .segRow { max-width: 100%; }
-
-  .footer {
-    padding: 10px 14px;
-    font-size: 11px;
-  }
-
-  .beta { display: block; margin-top: 4px; }
 }
