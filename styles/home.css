@@ -1,56 +1,76 @@
-.homeStack{padding:0 16px 16px;}
+.homeShell{display:flex; flex-direction:column; gap:12px}
 
-.homePrimary{
-  width:100%;
-  padding:16px 14px;
-  border-radius:16px;
-  border:1px solid rgba(125,211,252,.45);
-  background: linear-gradient(135deg, rgba(125,211,252,.26), rgba(96,165,250,.14));
-  color:var(--text);
-  font-size:16px;
-  font-weight:900;
-  cursor:pointer;
-  text-align:left;
-  box-shadow: 0 10px 24px rgba(0,0,0,.25);
-}
-.homePrimary .hint{
-  display:block;
-  margin-top:6px;
-  color:var(--muted);
-  font-weight:700;
-  font-size:13px;
-  line-height:1.25;
+.homeHeader{
+  padding:14px;
+  border-radius:var(--r);
+  border:1px solid var(--line);
+
+  /* ✅ soften the green gradient edge */
+  background:
+    linear-gradient(
+      180deg,
+      rgba(86,240,139,.10) 0%,
+      rgba(255,255,255,.04) 55%,
+      rgba(255,255,255,.02) 100%
+    );
 }
 
 .homeGrid{
   display:grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap:12px;
-  margin-top:12px;
-}
-@media (min-width: 860px){
-  .homeGrid{ grid-template-columns: repeat(3, 1fr); }
 }
 
-.homeBtn{
-  padding:16px 14px;
-  border-radius:16px;
-  border:1px solid var(--line);
-  background: rgba(255,255,255,.04);
-  color:var(--text);
-  font-size:15px;
-  font-weight:900;
-  cursor:pointer;
+@media(min-width:720px){
+  .homeGrid{grid-template-columns: 1fr 1fr}
+}
+
+.actionTile{
   text-align:left;
-  box-shadow: 0 10px 24px rgba(0,0,0,.25);
-  min-height:86px;
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  background:rgba(255,255,255,.04);
+  padding:14px;
+  cursor:pointer;
 }
-.homeBtn:hover{border-color: rgba(125,211,252,.35);}
-.homeBtn .hint{
-  display:block;
-  margin-top:6px;
-  color:var(--muted);
-  font-weight:700;
+
+.actionTile:hover{background:rgba(255,255,255,.06)}
+
+.tileTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.tileTitle{
+  font-weight:1000;
+  font-size:18px;
+  margin:0;
+  color:var(--text);
+}
+
+.tileSub{
+  margin-top:4px;
   font-size:13px;
-  line-height:1.25;
+  color:var(--muted);
 }
+
+.tileHint{
+  margin:10px 0 0 0;
+  font-size:13px;
+  line-height:1.35;
+  color:var(--muted2);
+}
+
+.zoneDot{
+  width:12px; height:12px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  margin-top:3px;
+}
+
+.dotGreen{background:rgba(86,240,139,.55); border-color:rgba(86,240,139,.35)}
+.dotYellow{background:rgba(255,216,74,.65); border-color:rgba(255,216,74,.35)}
+.dotRed{background:rgba(255,77,77,.65); border-color:rgba(255,77,77,.35)}
