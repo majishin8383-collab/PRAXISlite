@@ -2,22 +2,43 @@
 export function screenHome() {
   return `
     <section class="card">
-      <h1 class="h1">Praxis Lite</h1>
-      <p class="muted">
-        Choose what you need right now. Keep it simple. Keep it moving.
-      </p>
+      <h1 class="h1">PRAXIS</h1>
+      <p class="muted">Start with your state. One tap.</p>
+    </section>
 
-      <div class="btnGrid" style="margin-top:12px;">
-        <button class="primaryBtn" data-go="stabilize" type="button">🟢 Stabilize</button>
-        <button class="primaryBtn" data-go="act" type="button">🟡 Act (DOS)</button>
-        <button class="primaryBtn" data-go="moveforward" type="button">🔵 Move Forward</button>
+    <section class="card" style="margin-top:14px;">
+      <div class="muted" style="font-weight:700; opacity:.8; margin-bottom:2px;">Start here</div>
+      <div class="h2" style="margin:0 0 6px 0;">What do you need right now?</div>
+      <div class="muted" style="margin:0 0 12px 0;">One tap. No thinking.</div>
+
+      <div class="tileStack">
+        <button class="tile" data-go="stabilize" type="button">
+          <div class="tileMain">
+            <div class="tileTitle">Stabilize</div>
+            <div class="tileSub">Lower intensity first.</div>
+            <div class="tileHint">Tap</div>
+          </div>
+          <span class="tileDot dotGreen" aria-hidden="true"></span>
+        </button>
+
+        <button class="tile" data-go="act" type="button">
+          <div class="tileMain">
+            <div class="tileTitle">Act (DOS)</div>
+            <div class="tileSub">Choose the safest next action.</div>
+            <div class="tileHint">Tap</div>
+          </div>
+          <span class="tileDot dotYellow" aria-hidden="true"></span>
+        </button>
+
+        <button class="tile" data-go="moveforward" type="button">
+          <div class="tileMain">
+            <div class="tileTitle">Move Forward</div>
+            <div class="tileSub">Do one small useful thing.</div>
+            <div class="tileHint">Tap</div>
+          </div>
+          <span class="tileDot dotBlue" aria-hidden="true"></span>
+        </button>
       </div>
-
-      <div class="divider" style="margin:14px 0;"></div>
-
-      <p class="muted" style="margin:0;">
-        <strong>Goal:</strong> lower the volume → choose the safest next action → do one small useful thing.
-      </p>
     </section>
   `;
 }
