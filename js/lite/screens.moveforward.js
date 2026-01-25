@@ -35,16 +35,11 @@ export function screenMoveForward() {
   return `
     <section class="card">
       <h2 class="h2">Move Forward</h2>
-      <p class="muted">
-        One small useful action. No fixing your life. Just create momentum.
-      </p>
+      <p class="muted">Pick one small useful action. No fixing everything — just momentum.</p>
     </section>
 
     <section class="card" style="margin-top:14px;">
-      <div class="muted" style="font-weight:700; opacity:.8; margin-bottom:6px;">
-        Choose one
-      </div>
-
+      <div class="muted" style="font-weight:700; opacity:.8; margin-bottom:6px;">Choose one</div>
       <div class="tileStack">
         ${presetHtml}
       </div>
@@ -66,41 +61,19 @@ export function screenMoveForward() {
         </div>
         <span class="tileDot dotBlue" aria-hidden="true"></span>
       </div>
-    </section>
 
-    <section class="card" style="margin-top:14px;">
-      <div class="tileStack">
-        <button class="tile" data-status="done" type="button">
+      <div class="tileStack" style="margin-top:14px;">
+        <button class="tile" id="mfSave" type="button">
           <div class="tileMain">
-            <div class="tileTitle">Done</div>
-            <div class="tileSub">I did it.</div>
-            <div class="tileHint">Tap</div>
-          </div>
-          <span class="tileDot dotGreen" aria-hidden="true"></span>
-        </button>
-
-        <button class="tile" data-status="delay" type="button">
-          <div class="tileMain">
-            <div class="tileTitle">Delay</div>
-            <div class="tileSub">Not now. I paused.</div>
+            <div class="tileTitle">Save</div>
+            <div class="tileSub">Lock in one step and move.</div>
             <div class="tileHint">Tap</div>
           </div>
           <span class="tileDot dotYellow" aria-hidden="true"></span>
         </button>
-
-        <button class="tile" data-status="drop" type="button">
-          <div class="tileMain">
-            <div class="tileTitle">Drop it</div>
-            <div class="tileSub">Not useful right now.</div>
-            <div class="tileHint">Tap</div>
-          </div>
-          <span class="tileDot dotRed" aria-hidden="true"></span>
-        </button>
       </div>
-    </section>
 
-    <section class="card" style="margin-top:14px;">
-      <div id="mfSavedWrap" style="display:none;">
+      <div id="mfSavedWrap" style="margin-top:14px; display:none;">
         <div class="tile tileStatic" id="mfSaved"></div>
       </div>
 
@@ -125,10 +98,11 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
   });
 
   const input = root.querySelector("#mfAction");
+  const saveBtn = root.querySelector("#mfSave");
   const wrap = root.querySelector("#mfSavedWrap");
   const box = root.querySelector("#mfSaved");
 
-  // Tap preset fills input
+  // Tap preset fills input (lowest friction)
   root.querySelectorAll("[data-preset]").forEach((btn) => {
     btn.addEventListener("click", () => {
       input.value = btn.getAttribute("data-preset");
@@ -136,7 +110,7 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
     });
   });
 
-  function save(status) {
+  function save() {
     const text = (input.value || "").trim();
     if (!text) {
       input.focus();
@@ -144,7 +118,7 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
     }
 
     const stamp = new Date().toISOString();
-    const payload = { text, status, stamp };
+    const payload = { text, stamp };
 
     try {
       localStorage.setItem("praxis_lite_last_moveforward", JSON.stringify(payload));
@@ -155,14 +129,17 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
       <div class="tileMain">
         <div class="tileTitle">Saved</div>
         <div class="tileSub"><strong>Action:</strong> ${escapeHtml(text)}</div>
-        <div class="tileHint"><strong>Status:</strong> ${escapeHtml(status.toUpperCase())}</div>
+        <div class="tileHint">Now do the smallest first step.</div>
       </div>
-      <span class="tileDot dotBlue" aria-hidden="true"></span>
+      <span class="tileDot dotGreen" aria-hidden="true"></span>
     `;
     box.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  root.querySelectorAll("[data-status]").forEach((btn) => {
-    btn.addEventListener("click", () => save(btn.getAttribute("data-status")));
+  saveBtn.addEventListener("click", save);
+
+  // Optional: Enter key saves
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") save();
   });
 };
