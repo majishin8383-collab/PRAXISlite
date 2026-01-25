@@ -1,31 +1,100 @@
 :root{
   --bg:#0b0f14;
-  --panel:#121825;
-  --panel2:#0f1420;
-  --text:#e9eef7;
-  --muted:#aab6cc;
-  --line:rgba(255,255,255,.08);
-  --shadow:0 14px 50px rgba(0,0,0,.45);
-  --r:18px;
-  --r2:14px;
-  --w:980px;
-  --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  --panel:#0f1620;
+  --card:#121c28;
+  --text:#eaf2ff;
+  --muted:rgba(234,242,255,.72);
+  --muted2:rgba(234,242,255,.52);
+  --line:rgba(234,242,255,.12);
+
+  --green:#56f08b;
+  --yellow:#ffd84a;
+  --red:#ff4d4d;
+
+  --shadow: 0 18px 40px rgba(0,0,0,.35);
+  --r:20px;
 }
 
 *{box-sizing:border-box}
 html,body{height:100%}
+
 body{
   margin:0;
-  font-family:var(--sans);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  background: var(--bg);
   color:var(--text);
-  background:
-    radial-gradient(900px 500px at 15% 10%, rgba(96,165,250,.18), transparent 60%),
-    radial-gradient(800px 520px at 85% 0%, rgba(125,211,252,.12), transparent 55%),
-    radial-gradient(900px 700px at 55% 100%, rgba(34,197,94,.10), transparent 60%),
-    var(--bg);
+  position:relative;
 }
 
-.app{min-height:100vh; display:flex; flex-direction:column;}
-.main{flex:1;}
+/* ✅ seam-free gradient layer */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-1;
 
-.wrap{max-width:var(--w); margin:0 auto; padding:18px 18px 38px;}
+  background:
+    radial-gradient(1200px 800px at 20% -10%,
+      rgba(86,240,139,.20) 0%,
+      rgba(86,240,139,.12) 26%,
+      rgba(86,240,139,.06) 48%,
+      rgba(86,240,139,.02) 62%,
+      rgba(86,240,139,0) 80%),
+
+    radial-gradient(900px 600px at 90% 10%,
+      rgba(255,216,74,.14) 0%,
+      rgba(255,216,74,.08) 34%,
+      rgba(255,216,74,.04) 56%,
+      rgba(255,216,74,.01) 66%,
+      rgba(255,216,74,0) 82%),
+
+    radial-gradient(900px 600px at 50% 120%,
+      rgba(255,77,77,.12) 0%,
+      rgba(255,77,77,.06) 40%,
+      rgba(255,77,77,.03) 60%,
+      rgba(255,77,77,.01) 70%,
+      rgba(255,77,77,0) 86%);
+}
+
+a{color:inherit}
+button{font-family:inherit}
+
+.h1{font-size:28px; margin:0 0 6px 0; letter-spacing:.3px}
+.h2{font-size:18px; margin:0 0 6px 0}
+.p{margin:0; color:var(--muted); line-height:1.35}
+.small{margin:0; color:var(--muted2); font-size:13px; line-height:1.35}
+
+.app{
+  min-height:100%;
+  display:flex;
+  flex-direction:column;
+}
+
+.appHeader{
+  padding:16px 16px 10px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:12px;
+}
+
+.brandTitle{font-weight:900; letter-spacing:2px; font-size:14px}
+.brandSub{color:var(--muted2); font-size:12px; margin-top:4px}
+
+.main{
+  flex:1;
+  padding:12px 16px 22px 16px;
+  max-width:900px;
+  width:100%;
+  margin:0 auto;
+}
+
+.footer{
+  padding:14px 16px 22px 16px;
+  color:var(--muted2);
+  text-align:center;
+  font-size:12px;
+}
+
+.hr{height:1px; background:var(--line); margin:14px 0}
