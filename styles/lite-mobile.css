@@ -1,9 +1,9 @@
 /* ===============================
-   Praxis Lite — Mobile-first polish
-   + Praxis-style tile language
+   Praxis Lite — Layout + Tiles + Inputs + Segmented Controls
+   Full replacement
    =============================== */
 
-/* Desktop/tablet: constrain content so it feels intentional (not floating) */
+/* Desktop/tablet: constrain content so it feels intentional */
 .main {
   max-width: 720px;
   margin: 0 auto;
@@ -11,7 +11,12 @@
   padding-bottom: 64px;
 }
 
-/* --- Praxis Lite: match Praxis tile language ---- */
+/* Optional: soften background dominance slightly so content wins */
+.app {
+  backdrop-filter: saturate(0.9) brightness(0.95);
+}
+
+/* ---- Tile language (matches Praxis vibe) ---- */
 .tileStack { display: grid; gap: 14px; }
 
 .tile {
@@ -22,12 +27,26 @@
   border: 1px solid rgba(255,255,255,.10);
   background: rgba(0,0,0,.18);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 14px;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  appearance: none;
+  outline: none;
 }
 
 .tile:active { transform: translateY(1px); }
+
+.tileStatic {
+  cursor: default;
+}
+
+.tileDisabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
 
 .tileMain { display: grid; gap: 6px; }
 
@@ -35,49 +54,81 @@
 .tileSub { opacity: .85; }
 .tileHint { opacity: .65; font-size: 13px; margin-top: 6px; }
 
+.tileBody { margin-top: 8px; }
+
 .tileDot {
   width: 12px;
   height: 12px;
   border-radius: 999px;
   flex: 0 0 auto;
   opacity: .95;
+  margin-top: 6px;
 }
 
 .dotGreen { background: #4cd964; }
 .dotYellow { background: #ffd60a; }
 .dotBlue { background: #0a84ff; }
+.dotRed { background: #ff453a; }
 
-/* Optional: soften background dominance slightly so content wins */
-.app {
-  backdrop-filter: saturate(0.9) brightness(0.95);
+/* Lists inside tiles */
+.liteList { margin: 10px 0 0 18px; }
+.liteList li { margin: 4px 0; }
+
+/* ---- Input styling (so it doesn’t look like a desktop textbox) ---- */
+.liteInput {
+  width: 100%;
+  padding: 14px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.20);
+  color: inherit;
+  font-size: 15px;
+  outline: none;
 }
+
+.liteInput::placeholder { opacity: .65; }
+
+/* ---- Segmented Yes/No controls (Praxis-style) ---- */
+.segRow {
+  margin-top: 10px;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  max-width: 260px;
+}
+
+.segBtn {
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.18);
+  color: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  appearance: none;
+  outline: none;
+}
+
+.segBtn.isSelected {
+  border-color: rgba(255,255,255,.35);
+  background: rgba(255,255,255,.10);
+  box-shadow: 0 0 0 2px rgba(255,255,255,.08) inset;
+}
+
+.segBtn:active { transform: translateY(1px); }
 
 /* ===============================
    Mobile tweaks
    =============================== */
 @media (max-width: 640px) {
+  .appHeader { padding: 10px 14px; }
 
-  /* Header */
-  .appHeader {
-    padding: 10px 14px;
-  }
+  .brandTitle { font-size: 18px; letter-spacing: 0.06em; }
+  .brandSub { font-size: 12px; opacity: 0.85; }
 
-  .brandTitle {
-    font-size: 18px;
-    letter-spacing: 0.06em;
-  }
+  .topNav .linkBtn { font-size: 13px; padding: 6px 10px; }
 
-  .brandSub {
-    font-size: 12px;
-    opacity: 0.85;
-  }
-
-  .topNav .linkBtn {
-    font-size: 13px;
-    padding: 6px 10px;
-  }
-
-  /* Main content */
   .main {
     max-width: 680px;
     margin: 0 auto;
@@ -86,55 +137,20 @@
     padding-bottom: 40px;
   }
 
-  /* Cards */
   .card {
     padding: 14px;
     border-radius: 14px;
   }
 
-  .card + .card {
-    margin-top: 12px;
-  }
-
-  /* Headings (if your CSS defines these, this just nudges mobile sizing) */
-  .h1 { font-size: 20px; }
-  .h2 { font-size: 18px; }
-  .h3 { font-size: 15px; }
-
-  p, li {
-    font-size: 14px;
-    line-height: 1.45;
-  }
-
-  /* Tile tightening */
   .tile { padding: 16px; border-radius: 16px; }
   .tileTitle { font-size: 20px; }
 
-  /* Buttons (if present elsewhere) */
-  .primaryBtn,
-  .ghostBtn,
-  .pillBtn {
-    padding: 12px 14px;
-    font-size: 15px;
-    border-radius: 14px;
-  }
+  .segRow { max-width: 100%; }
 
-  /* Inputs */
-  .input {
-    width: 100%;
-    padding: 14px;
-    font-size: 15px;
-    border-radius: 12px;
-  }
-
-  /* Footer */
   .footer {
     padding: 10px 14px;
     font-size: 11px;
   }
 
-  .beta {
-    display: block;
-    margin-top: 4px;
-  }
+  .beta { display: block; margin-top: 4px; }
 }
