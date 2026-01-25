@@ -1,0 +1,104 @@
+/* ===============================
+   Praxis Lite — Mobile-first polish
+   =============================== */
+
+@media (max-width: 640px) {
+
+  /* App container */
+  .app {
+    padding: 0;
+  }
+
+  /* Header */
+  .appHeader {
+    padding: 10px 14px;
+  }
+
+  .brandTitle {
+    font-size: 18px;
+    letter-spacing: 0.06em;
+  }
+
+  .brandSub {
+    font-size: 12px;
+    opacity: 0.85;
+  }
+
+  .topNav .linkBtn {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+
+  /* Main content */
+  .main {
+    padding: 12px;
+  }
+
+  /* Cards */
+  .card {
+    padding: 14px;
+    border-radius: 14px;
+  }
+
+  .card + .card {
+    margin-top: 12px;
+  }
+
+  /* Headings */
+  .h1 { font-size: 20px; }
+  .h2 { font-size: 18px; }
+  .h3 { font-size: 15px; }
+
+  p, li {
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  /* Buttons */
+  .primaryBtn,
+  .ghostBtn,
+  .pillBtn {
+    padding: 12px 14px;
+    font-size: 15px;
+    border-radius: 14px;
+  }
+
+  .btnGrid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .btnRow {
+    gap: 10px;
+  }
+
+  /* Inputs */
+  .input {
+    padding: 14px;
+    font-size: 15px;
+  }
+
+  /* DOS questions */
+  .qRow {
+    padding: 12px 0;
+  }
+
+  .qText {
+    font-size: 14px;
+  }
+
+  .qBtns {
+    margin-top: 8px;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 10px 14px;
+    font-size: 11px;
+  }
+
+  .beta {
+    display: block;
+    margin-top: 4px;
+  }
+}
