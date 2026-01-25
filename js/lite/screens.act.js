@@ -3,14 +3,14 @@
 const QUESTIONS = [
   "Have I slept at least 5 hours in the last 24 hours?",
   "Have I eaten a real meal in the last 8 hours?",
-  "Have I had alcohol or substances that can distort judgment today?",
-  "Has this situation repeatedly harmed my peace or stability?",
-  "Have I asked clearly for what I need (once) without escalating?",
-  "Is there a time pressure that is real (not imagined) within 24 hours?",
+  "Have I used alcohol or any substance today that could distort judgment?",
+  "Is this situation repeatedly harming my peace, health, stability, or goals?",
+  "Have I already tried the simplest respectful step once (without escalating)?",
+  "Is there a real time pressure within 24 hours (not imagined)?",
   "Is my next step reversible if it goes poorly?",
-  "If a friend described this exact situation, would I advise them to pause?",
-  "Do I have enough information to decide, or am I guessing?",
-  "Will engaging right now make things measurably better within 48 hours?"
+  "If a trusted friend described this exact situation, would I advise them to pause?",
+  "Do I have enough information to decide right now?",
+  "Will taking action right now make things measurably better within 48 hours?"
 ];
 
 function computeResult(answers) {
@@ -20,34 +20,36 @@ function computeResult(answers) {
   // Stability basics (no = risk)
   if (answers[0] === "no") risk += 2; // sleep
   if (answers[1] === "no") risk += 2; // food
-  if (answers[2] === "yes") risk += 2; // substances
 
-  // Pattern harm
+  // Substances (yes = risk)
+  if (answers[2] === "yes") risk += 2;
+
+  // Repeated harm (yes = risk)
   if (answers[3] === "yes") risk += 2;
 
-  // Communication done (no = slight risk)
+  // Tried simplest step (no = slight risk)
   if (answers[4] === "no") risk += 1;
 
-  // Real deadline (yes = slight reduce)
+  // Real deadline (yes = slight reduce — may justify acting)
   if (answers[5] === "yes") risk -= 1;
 
   // Reversible (no = risk)
   if (answers[6] === "no") risk += 2;
 
-  // Would advise pause (yes = risk)
+  // Friend would advise pause (yes = risk)
   if (answers[7] === "yes") risk += 2;
 
   // Enough info (no = risk)
   if (answers[8] === "no") risk += 2;
 
-  // Engagement helps (no = risk)
+  // Action improves 48h (no = risk)
   if (answers[9] === "no") risk += 2;
 
   risk = Math.max(0, Math.min(14, risk));
 
-  if (risk >= 9) return { verdict: "DISENGAGE", dot: "dotRed", note: "Do not engage today. Protect your peace. Revisit after recovery and time." };
+  if (risk >= 9) return { verdict: "DISENGAGE", dot: "dotRed", note: "Do not engage today. Protect your stability. Revisit after rest, food, and time." };
   if (risk >= 5) return { verdict: "PAUSE", dot: "dotYellow", note: "Pause. Stabilize first. Set a time to revisit with a clearer head." };
-  return { verdict: "PROCEED", dot: "dotGreen", note: "Proceed calmly with one clear step. Keep it short and factual." };
+  return { verdict: "PROCEED", dot: "dotGreen", note: "Proceed calmly with one clear step. Keep it short, simple, and values-aligned." };
 }
 
 export function screenAct() {
@@ -139,7 +141,9 @@ window.__LITE_HOOKS.act = (root, router) => {
     const done = answers.every(Boolean);
     submit.disabled = !done;
     submit.classList.toggle("tileDisabled", !done);
-    submit.querySelector(".tileSub").textContent = done ? "Tap to compute your safest next move." : "Complete all answers first.";
+    submit.querySelector(".tileSub").textContent = done
+      ? "Tap to compute your safest next move."
+      : "Complete all answers first.";
   }
 
   root.querySelectorAll(".dosTile").forEach((tile) => {
@@ -150,11 +154,9 @@ window.__LITE_HOOKS.act = (root, router) => {
     function setSelected(val) {
       answers[idx] = val;
 
-      // visual selection
       yesBtn.classList.toggle("isSelected", val === "yes");
       noBtn.classList.toggle("isSelected", val === "no");
 
-      // aria pressed
       yesBtn.setAttribute("aria-pressed", String(val === "yes"));
       noBtn.setAttribute("aria-pressed", String(val === "no"));
 
@@ -174,7 +176,7 @@ window.__LITE_HOOKS.act = (root, router) => {
     } catch {}
 
     resultWrap.style.display = "block";
-    resultBox.className = "tile tileStatic"; // reset
+    resultBox.className = "tile tileStatic";
     resultBox.innerHTML = `
       <div class="tileMain">
         <div class="tileTitle">Result: ${out.verdict}</div>
