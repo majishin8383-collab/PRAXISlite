@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Praxis</title>
-  <meta name="description" content="Praxis — a self-guided emotional regulation tool." />
+  <title>Praxis Lite</title>
+  <meta name="description" content="Praxis Lite — a self-guided emotional regulation tool (Stabilize → Act → Move Forward)." />
 
-  <!-- Styles -->
+  <!-- Styles (keep your existing Praxis styles for now) -->
   <link rel="stylesheet" href="./styles/base.css">
   <link rel="stylesheet" href="./styles/components.css">
   <link rel="stylesheet" href="./styles/home.css">
@@ -18,11 +18,11 @@
   <div id="app" class="app">
     <header class="appHeader">
       <div class="brand">
-        <div class="brandTitle">PRAXIS</div>
-        <div class="brandSub">Stabilize → Act → Move forward</div>
+        <div class="brandTitle">PRAXIS LITE</div>
+        <div class="brandSub">Stabilize → Act → Move Forward</div>
       </div>
       <nav class="topNav">
-        <button class="linkBtn" id="navHome" type="button">Reset</button>
+        <button class="linkBtn" id="navHome" type="button" aria-label="Reset to Home">Reset</button>
       </nav>
     </header>
 
@@ -30,8 +30,8 @@
 
     <footer class="footer">
       <div>
-        <strong>© 2025 Joseph Satmary.</strong> All rights reserved.
-        <span class="beta">Beta — features and design are subject to change.</span>
+        <strong>© 2026 Joseph Satmary.</strong> All rights reserved.
+        <span class="beta">Lite — focused, minimal, and intentionally simple.</span>
       </div>
       <div>
         <a href="./legal.html">Legal</a>
@@ -39,9 +39,7 @@
     </footer>
   </div>
 
-  <!-- ✅ Cache-busted boot -->
-  <script type="module">
-    import(`./js/app.js?v=${Date.now()}`);
-  </script>
+  <!-- ✅ Praxis Lite boot (ONLY) -->
+  <script type="module" src="./js/lite/app.js?v=lite-1.0.0"></script>
 </body>
 </html>
