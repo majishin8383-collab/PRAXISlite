@@ -13,6 +13,11 @@
   <link rel="stylesheet" href="./styles/flows.css">
   <link rel="stylesheet" href="./styles/redzone.css">
   <link rel="stylesheet" href="./styles/lite-mobile.css">
+
+  <!-- Force a clean load on mobile if anything cached -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
 </head>
 
 <body>
@@ -20,7 +25,7 @@
     <header class="appHeader">
       <div class="brand">
         <div class="brandTitle">PRAXIS LITE</div>
-        <div class="brandSub">Stabilize → Act → Move Forward</div>
+        <div class="brandSub">Stabilize → Stop the Urge → Move Forward</div>
       </div>
       <nav class="topNav">
         <button class="linkBtn" id="navHome" type="button" aria-label="Reset to Home">Reset</button>
@@ -33,6 +38,7 @@
       <div>
         <strong>© 2026 Joseph Satmary.</strong> All rights reserved.
         <span class="beta">Lite — focused, minimal, and intentionally simple.</span>
+        <span class="beta" style="opacity:.7; margin-left:.5rem;">build lite-1.0.3</span>
       </div>
       <div>
         <a href="./legal.html">Legal</a>
@@ -40,7 +46,23 @@
     </footer>
   </div>
 
+  <!-- If a service worker ever got registered, nuke it + caches -->
+  <script>
+    (async () => {
+      try {
+        if ("serviceWorker" in navigator) {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          for (const r of regs) await r.unregister();
+        }
+        if (window.caches && caches.keys) {
+          const keys = await caches.keys();
+          for (const k of keys) await caches.delete(k);
+        }
+      } catch {}
+    })();
+  </script>
+
   <!-- Praxis Lite boot -->
-  <script type="module" src="./js/lite/app.js?v=lite-1.0.2"></script>
+  <script type="module" src="./js/lite/app.js?v=lite-1.0.3"></script>
 </body>
 </html>
