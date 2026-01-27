@@ -6,7 +6,7 @@ import { screenStabilize } from "./screens.stabilize.js";
 import { screenStopUrge } from "./screens.stopurge.js";
 import { screenEmergency } from "./screens.emergency.js";
 import { screenMoveForward } from "./screens.moveforward.js";
-import { screenClosure } from "./screens.closure.js"; // ✅ new
+import { screenClosure } from "./screens.closure.js";
 
 const SCREENS = {
   home: screenHome,
@@ -14,7 +14,7 @@ const SCREENS = {
   stopurge: screenStopUrge,
   emergency: screenEmergency,
   moveforward: screenMoveForward,
-  closure: screenClosure, // ✅ new
+  closure: screenClosure,
 };
 
 function getHook(name) {
