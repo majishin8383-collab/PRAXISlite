@@ -24,8 +24,8 @@ export function screenMoveForward() {
   const presetHtml = PRESETS.map((p) => `
     <button class="tile" data-preset="${escapeHtml(p)}" type="button">
       <div class="tileMain">
-        <div class="tileTitle">${p}</div>
-        <div class="tileSub">Tap = saved.</div>
+        <div class="tileTitle">${escapeHtml(p)}</div>
+        <div class="tileSub">Tap.</div>
         <div class="tileHint">Tap</div>
       </div>
       <span class="tileDot dotGreen" aria-hidden="true"></span>
@@ -43,10 +43,10 @@ export function screenMoveForward() {
         ${presetHtml}
       </div>
 
-      <div class="muted" style="font-weight:700; opacity:.8; margin:16px 0 8px;">Closure</div>
+      <div class="muted" style="font-weight:700; opacity:.8; margin:16px 0 8px;">End</div>
 
       <div class="tileStack">
-        <button class="tile" data-close="REST" type="button">
+        <button class="tile" data-end="REST" data-line="Stop here." type="button">
           <div class="tileMain">
             <div class="tileTitle">REST</div>
             <div class="tileSub">Stop here.</div>
@@ -55,7 +55,7 @@ export function screenMoveForward() {
           <span class="tileDot dotBlue" aria-hidden="true"></span>
         </button>
 
-        <button class="tile" data-close="READINESS" type="button">
+        <button class="tile" data-end="READINESS" data-line="One step is available." type="button">
           <div class="tileMain">
             <div class="tileTitle">READINESS</div>
             <div class="tileSub">One step is available.</div>
@@ -73,53 +73,20 @@ export function screenMoveForward() {
           <span class="tileDot dotBlue" aria-hidden="true"></span>
         </button>
       </div>
-
-      <div id="mfSavedWrap" style="margin-top:14px; display:none;">
-        <div class="tile tileStatic" id="mfSaved"></div>
-      </div>
     </section>
   `;
 }
 
 window.__LITE_HOOKS = window.__LITE_HOOKS || {};
 window.__LITE_HOOKS.moveforward = (root, router) => {
-  const wrap = root.querySelector("#mfSavedWrap");
-  const box = root.querySelector("#mfSaved");
-
-  function saveAction(text) {
-    const stamp = new Date().toISOString();
+  function end(flow, state, line) {
     try {
-      localStorage.setItem("praxis_lite_last_moveforward", JSON.stringify({ text, stamp }));
+      sessionStorage.setItem(
+        "praxis_lite_closure",
+        JSON.stringify({ flow, state, line, stamp: new Date().toISOString() })
+      );
     } catch {}
-
-    wrap.style.display = "block";
-    box.innerHTML = `
-      <div class="tileMain">
-        <div class="tileTitle">READINESS</div>
-        <div class="tileSub">${escapeHtml(text)}</div>
-        <div class="tileHint">Closure named.</div>
-      </div>
-      <span class="tileDot dotGreen" aria-hidden="true"></span>
-    `;
-    box.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-  function saveClosure(state) {
-    const stamp = new Date().toISOString();
-    try {
-      localStorage.setItem("praxis_lite_last_closure", JSON.stringify({ flow: "moveforward", state, stamp }));
-    } catch {}
-
-    wrap.style.display = "block";
-    box.innerHTML = `
-      <div class="tileMain">
-        <div class="tileTitle">${state}</div>
-        <div class="tileSub">Closure named.</div>
-        <div class="tileHint">Return when ready.</div>
-      </div>
-      <span class="tileDot dotGreen" aria-hidden="true"></span>
-    `;
-    box.scrollIntoView({ behavior: "smooth", block: "start" });
+    router.go("closure");
   }
 
   root.querySelectorAll("[data-go]").forEach((btn) => {
@@ -127,10 +94,16 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
   });
 
   root.querySelectorAll("[data-preset]").forEach((btn) => {
-    btn.addEventListener("click", () => saveAction(btn.getAttribute("data-preset")));
+    btn.addEventListener("click", () => {
+      const action = btn.getAttribute("data-preset") || "One small step.";
+      // preset tap = READINESS with the chosen step as the closure line
+      end("moveforward", "READINESS", action);
+    });
   });
 
-  root.querySelectorAll("[data-close]").forEach((btn) => {
-    btn.addEventListener("click", () => saveClosure(btn.getAttribute("data-close")));
+  root.querySelectorAll("[data-end]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      end("moveforward", btn.getAttribute("data-end"), btn.getAttribute("data-line") || "Stop here.");
+    });
   });
 };
