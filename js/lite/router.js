@@ -11,7 +11,7 @@ export const router = (() => {
     "stopurge",
     "emergency",
     "moveforward",
-    "closure", // ✅ new: real endpoint page
+    "closure",
   ]);
 
   function clean(route) {
