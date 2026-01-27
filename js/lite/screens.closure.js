@@ -21,11 +21,10 @@ export function screenClosure() {
     line: "Stop here."
   });
 
+  const flow = String(data.flow || "lite");
   const state = String(data.state || "REST");
   const line = String(data.line || "Stop here.");
-  const flow = String(data.flow || "lite");
 
-  // Show Move Forward only when READINESS
   const showMoveForward = state === "READINESS";
 
   return `
