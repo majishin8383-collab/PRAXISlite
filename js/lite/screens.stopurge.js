@@ -38,12 +38,10 @@ export function screenStopUrge() {
           </div>
           <span class="tileDot dotBlue" aria-hidden="true"></span>
         </div>
-      </div>
 
-      <div class="muted" style="font-weight:700; opacity:.8; margin:16px 0 8px;">Closure</div>
+        <div class="muted" style="font-weight:700; opacity:.8; margin:16px 0 8px;">End</div>
 
-      <div class="tileStack">
-        <button class="tile" data-close="REST" type="button">
+        <button class="tile" data-end="REST" data-line="Stop here." type="button">
           <div class="tileMain">
             <div class="tileTitle">REST</div>
             <div class="tileSub">Stop here.</div>
@@ -52,7 +50,7 @@ export function screenStopUrge() {
           <span class="tileDot dotBlue" aria-hidden="true"></span>
         </button>
 
-        <button class="tile" data-close="RELIEF" type="button">
+        <button class="tile" data-end="RELIEF" data-line="Pressure reduced." type="button">
           <div class="tileMain">
             <div class="tileTitle">RELIEF</div>
             <div class="tileSub">Pressure reduced.</div>
@@ -61,7 +59,7 @@ export function screenStopUrge() {
           <span class="tileDot dotYellow" aria-hidden="true"></span>
         </button>
 
-        <button class="tile" data-close="READINESS" data-go="moveforward" type="button">
+        <button class="tile" data-end="READINESS" data-line="One small step is available." type="button">
           <div class="tileMain">
             <div class="tileTitle">READINESS</div>
             <div class="tileSub">One small step is available.</div>
@@ -79,46 +77,29 @@ export function screenStopUrge() {
           <span class="tileDot dotBlue" aria-hidden="true"></span>
         </button>
       </div>
-
-      <div id="urgeSavedWrap" style="margin-top:14px; display:none;">
-        <div class="tile tileStatic" id="urgeSaved"></div>
-      </div>
     </section>
   `;
 }
 
 window.__LITE_HOOKS = window.__LITE_HOOKS || {};
 window.__LITE_HOOKS.stopurge = (root, router) => {
-  const wrap = root.querySelector("#urgeSavedWrap");
-  const box = root.querySelector("#urgeSaved");
-
-  function saveClosure(state) {
-    const stamp = new Date().toISOString();
+  function end(flow, state, line) {
     try {
-      localStorage.setItem("praxis_lite_last_closure", JSON.stringify({ flow: "stopurge", state, stamp }));
+      sessionStorage.setItem(
+        "praxis_lite_closure",
+        JSON.stringify({ flow, state, line, stamp: new Date().toISOString() })
+      );
     } catch {}
-
-    wrap.style.display = "block";
-    box.innerHTML = `
-      <div class="tileMain">
-        <div class="tileTitle">${state}</div>
-        <div class="tileSub">Closure named.</div>
-        <div class="tileHint">Return when ready.</div>
-      </div>
-      <span class="tileDot dotGreen" aria-hidden="true"></span>
-    `;
-    box.scrollIntoView({ behavior: "smooth", block: "start" });
+    router.go("closure");
   }
 
   root.querySelectorAll("[data-go]").forEach((btn) => {
     btn.addEventListener("click", () => router.go(btn.getAttribute("data-go")));
   });
 
-  root.querySelectorAll("[data-close]").forEach((btn) => {
+  root.querySelectorAll("[data-end]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      saveClosure(btn.getAttribute("data-close"));
-      const go = btn.getAttribute("data-go");
-      if (go) router.go(go);
+      end("stopurge", btn.getAttribute("data-end"), btn.getAttribute("data-line") || "Stop here.");
     });
   });
 };
