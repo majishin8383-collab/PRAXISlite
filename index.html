@@ -13,11 +13,6 @@
   <link rel="stylesheet" href="./styles/flows.css">
   <link rel="stylesheet" href="./styles/redzone.css">
   <link rel="stylesheet" href="./styles/lite-mobile.css">
-
-  <!-- Force a clean load on mobile if anything cached -->
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
 </head>
 
 <body>
@@ -32,13 +27,18 @@
       </nav>
     </header>
 
-    <main id="main" class="main" role="main"></main>
+    <main id="main" class="main" role="main">
+      <section class="card">
+        <h2 class="h2">Loading…</h2>
+        <p class="muted">If you keep seeing this, the Lite JS is not running.</p>
+        <p class="muted" style="opacity:.7;">build lite-diag-1</p>
+      </section>
+    </main>
 
     <footer class="footer">
       <div>
         <strong>© 2026 Joseph Satmary.</strong> All rights reserved.
         <span class="beta">Lite — focused, minimal, and intentionally simple.</span>
-        <span class="beta" style="opacity:.7; margin-left:.5rem;">build lite-1.0.3</span>
       </div>
       <div>
         <a href="./legal.html">Legal</a>
@@ -46,23 +46,35 @@
     </footer>
   </div>
 
-  <!-- If a service worker ever got registered, nuke it + caches -->
+  <!-- On-page error capture (shows JS/module failures right inside the app) -->
   <script>
-    (async () => {
-      try {
-        if ("serviceWorker" in navigator) {
-          const regs = await navigator.serviceWorker.getRegistrations();
-          for (const r of regs) await r.unregister();
-        }
-        if (window.caches && caches.keys) {
-          const keys = await caches.keys();
-          for (const k of keys) await caches.delete(k);
-        }
-      } catch {}
+    (function () {
+      const main = () => document.getElementById("main");
+      function show(msg) {
+        const m = main();
+        if (!m) return;
+        m.innerHTML = `
+          <section class="card">
+            <h2 class="h2">Lite failed to load</h2>
+            <p class="muted" style="white-space:pre-wrap;">${String(msg).replace(/[&<>"']/g, c => ({
+              "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+            }[c]))}</p>
+            <p class="muted" style="opacity:.7;">build lite-diag-1</p>
+          </section>
+        `;
+      }
+
+      window.addEventListener("error", (e) => {
+        show((e && (e.message || e.error)) || "Unknown error");
+      });
+
+      window.addEventListener("unhandledrejection", (e) => {
+        show((e && e.reason) ? e.reason : "Unhandled promise rejection");
+      });
     })();
   </script>
 
   <!-- Praxis Lite boot -->
-  <script type="module" src="./js/lite/app.js?v=lite-1.0.3"></script>
+  <script type="module" src="./js/lite/app.js?v=lite-diag-1"></script>
 </body>
 </html>
