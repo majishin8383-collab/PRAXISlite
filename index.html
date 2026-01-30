@@ -6,13 +6,16 @@
   <title>Praxis Lite</title>
   <meta name="description" content="Praxis Lite — a self-guided emotional regulation tool (Stabilize → Stop the Urge → Move Forward → Emergency)." />
 
+  <!-- GitHub Pages base-path safe -->
+  <base href="./" />
+
   <!-- Styles -->
-  <link rel="stylesheet" href="styles/base.css">
-  <link rel="stylesheet" href="styles/components.css">
-  <link rel="stylesheet" href="styles/home.css">
-  <link rel="stylesheet" href="styles/flows.css">
-  <link rel="stylesheet" href="styles/redzone.css">
-  <link rel="stylesheet" href="styles/lite-mobile.css">
+  <link rel="stylesheet" href="./styles/base.css">
+  <link rel="stylesheet" href="./styles/components.css">
+  <link rel="stylesheet" href="./styles/home.css">
+  <link rel="stylesheet" href="./styles/flows.css">
+  <link rel="stylesheet" href="./styles/redzone.css">
+  <link rel="stylesheet" href="./styles/lite-mobile.css">
 </head>
 
 <body>
@@ -20,14 +23,20 @@
     <header class="appHeader">
       <div class="brand">
         <div class="brandTitle">PRAXIS LITE</div>
-        <div class="brandSub">Stabilize → Act → Move Forward</div>
+        <div class="brandSub">Stabilize → Stop the Urge → Move Forward</div>
       </div>
       <nav class="topNav">
         <button class="linkBtn" id="navHome" type="button" aria-label="Reset to Home">Reset</button>
       </nav>
     </header>
 
-    <main id="main" class="main" role="main"></main>
+    <main id="main" class="main" role="main">
+      <section class="card">
+        <h2 class="h2">Loading…</h2>
+        <p class="muted">If this stays, Lite JS is not loading.</p>
+        <p class="muted" style="opacity:.7;">build lite-base-1</p>
+      </section>
+    </main>
 
     <footer class="footer">
       <div>
@@ -35,12 +44,30 @@
         <span class="beta">Lite — focused, minimal, and intentionally simple.</span>
       </div>
       <div>
-        <a href="legal.html">Legal</a>
+        <a href="./legal.html">Legal</a>
       </div>
     </footer>
   </div>
 
+  <!-- On-page error capture -->
+  <script>
+    (function () {
+      const m = () => document.getElementById("main");
+      function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]))}
+      function show(msg){
+        const el = m(); if(!el) return;
+        el.innerHTML = `<section class="card">
+          <h2 class="h2">Lite failed to load</h2>
+          <p class="muted" style="white-space:pre-wrap;">${esc(msg)}</p>
+          <p class="muted" style="opacity:.7;">build lite-base-1</p>
+        </section>`;
+      }
+      window.addEventListener("error", (e) => show(e?.message || e?.error || "Unknown error"));
+      window.addEventListener("unhandledrejection", (e) => show(e?.reason || "Unhandled rejection"));
+    })();
+  </script>
+
   <!-- Praxis Lite boot -->
-  <script type="module" src="js/lite/app.js?v=lite-1.0.3"></script>
+  <script type="module" src="./js/lite/app.js?v=lite-base-1"></script>
 </body>
 </html>
