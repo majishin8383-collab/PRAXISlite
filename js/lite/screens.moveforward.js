@@ -30,8 +30,7 @@ export function screenMoveForward() {
   const last = safeParse(localStorage.getItem(KEY_LAST_STEP), null);
   const lastText = last && typeof last.text === "string" ? last.text : "";
 
-  // If we have a recent selection in this session, show the end-state view.
-  // (We’ll keep it simple: any saved text triggers the end view.)
+  // END STATE: show the action they chose + a real "Done" ending
   if (lastText) {
     return `
       <section class="card">
@@ -42,9 +41,9 @@ export function screenMoveForward() {
       <section class="card" style="margin-top:14px;">
         <div class="tile tileStatic">
           <div class="tileMain">
-            <div class="tileTitle">Selected</div>
+            <div class="tileTitle">Your step</div>
             <div class="tileSub">${escapeHtml(lastText)}</div>
-            <div class="tileHint">Done.</div>
+            <div class="tileHint">Taken.</div>
           </div>
           <span class="tileDot dotGreen" aria-hidden="true"></span>
         </div>
@@ -63,7 +62,7 @@ export function screenMoveForward() {
 
           <button class="tile" data-reset="1" type="button">
             <div class="tileMain">
-              <div class="tileTitle">Choose a different step</div>
+              <div class="tileTitle">Pick a different step</div>
               <div class="tileSub">Show options again.</div>
               <div class="tileHint">Tap</div>
             </div>
@@ -74,6 +73,7 @@ export function screenMoveForward() {
     `;
   }
 
+  // PICK STATE: show presets
   const presetHtml = PRESETS.map((p) => `
     <button class="tile" data-preset="${escapeHtml(p)}" type="button">
       <div class="tileMain">
@@ -125,21 +125,27 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
     try { localStorage.removeItem(KEY_LAST_STEP); } catch {}
   }
 
-  // normal nav
+  // IMPORTANT: re-render this screen IN PLACE (router won't refresh same route)
+  function rerenderSelf() {
+    root.innerHTML = screenMoveForward();
+    window.__LITE_HOOKS.moveforward(root, router);
+  }
+
+  // nav
   root.querySelectorAll("[data-go]").forEach((btn) => {
     btn.addEventListener("click", () => router.go(btn.getAttribute("data-go")));
   });
 
-  // pick preset -> save + rerender same route (so user sees the ending)
+  // preset tap -> save + show end-state on THIS screen
   root.querySelectorAll("[data-preset]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const action = btn.getAttribute("data-preset") || "One small step.";
       saveStep(action);
-      router.go("moveforward");
+      rerenderSelf();
     });
   });
 
-  // done -> clear and go home
+  // done -> clear + go home
   root.querySelectorAll("[data-done]").forEach((btn) => {
     btn.addEventListener("click", () => {
       clearStep();
@@ -147,11 +153,11 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
     });
   });
 
-  // reset -> clear and show presets again
+  // reset -> clear + show presets again
   root.querySelectorAll("[data-reset]").forEach((btn) => {
     btn.addEventListener("click", () => {
       clearStep();
-      router.go("moveforward");
+      rerenderSelf();
     });
   });
 };
