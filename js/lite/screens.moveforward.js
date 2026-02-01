@@ -10,6 +10,12 @@ function escapeHtml(s) {
   }[c]));
 }
 
+function safeParse(json, fallback) {
+  try { return JSON.parse(json); } catch { return fallback; }
+}
+
+const KEY_LAST_STEP = "praxis_lite_last_step";
+
 const PRESETS = [
   "Drink water",
   "Five slow breaths",
@@ -21,6 +27,53 @@ const PRESETS = [
 ];
 
 export function screenMoveForward() {
+  const last = safeParse(localStorage.getItem(KEY_LAST_STEP), null);
+  const lastText = last && typeof last.text === "string" ? last.text : "";
+
+  // If we have a recent selection in this session, show the end-state view.
+  // (We’ll keep it simple: any saved text triggers the end view.)
+  if (lastText) {
+    return `
+      <section class="card">
+        <h2 class="h2">Move Forward</h2>
+        <p class="muted">One small step.</p>
+      </section>
+
+      <section class="card" style="margin-top:14px;">
+        <div class="tile tileStatic">
+          <div class="tileMain">
+            <div class="tileTitle">Selected</div>
+            <div class="tileSub">${escapeHtml(lastText)}</div>
+            <div class="tileHint">Done.</div>
+          </div>
+          <span class="tileDot dotGreen" aria-hidden="true"></span>
+        </div>
+
+        <div class="muted" style="font-weight:700; opacity:.8; margin:16px 0 8px;">End</div>
+
+        <div class="tileStack">
+          <button class="tile" data-done="1" type="button">
+            <div class="tileMain">
+              <div class="tileTitle">Done</div>
+              <div class="tileSub">You can stop here.</div>
+              <div class="tileHint">Tap</div>
+            </div>
+            <span class="tileDot dotBlue" aria-hidden="true"></span>
+          </button>
+
+          <button class="tile" data-reset="1" type="button">
+            <div class="tileMain">
+              <div class="tileTitle">Choose a different step</div>
+              <div class="tileSub">Show options again.</div>
+              <div class="tileHint">Tap</div>
+            </div>
+            <span class="tileDot dotYellow" aria-hidden="true"></span>
+          </button>
+        </div>
+      </section>
+    `;
+  }
+
   const presetHtml = PRESETS.map((p) => `
     <button class="tile" data-preset="${escapeHtml(p)}" type="button">
       <div class="tileMain">
@@ -43,13 +96,11 @@ export function screenMoveForward() {
         ${presetHtml}
       </div>
 
-      <div class="muted" style="font-weight:700; opacity:.8; margin:16px 0 8px;">End</div>
-
-      <div class="tileStack">
+      <div class="tileStack" style="margin-top:14px;">
         <button class="tile" data-go="home" type="button">
           <div class="tileMain">
-            <div class="tileTitle">Done</div>
-            <div class="tileSub">You can stop here.</div>
+            <div class="tileTitle">Back</div>
+            <div class="tileSub">Return to start.</div>
             <div class="tileHint">Tap</div>
           </div>
           <span class="tileDot dotBlue" aria-hidden="true"></span>
@@ -64,21 +115,43 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
   function saveStep(text) {
     try {
       localStorage.setItem(
-        "praxis_lite_last_step",
+        KEY_LAST_STEP,
         JSON.stringify({ text, stamp: new Date().toISOString() })
       );
     } catch {}
   }
 
+  function clearStep() {
+    try { localStorage.removeItem(KEY_LAST_STEP); } catch {}
+  }
+
+  // normal nav
   root.querySelectorAll("[data-go]").forEach((btn) => {
     btn.addEventListener("click", () => router.go(btn.getAttribute("data-go")));
   });
 
+  // pick preset -> save + rerender same route (so user sees the ending)
   root.querySelectorAll("[data-preset]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const action = btn.getAttribute("data-preset") || "One small step.";
       saveStep(action);
+      router.go("moveforward");
+    });
+  });
+
+  // done -> clear and go home
+  root.querySelectorAll("[data-done]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      clearStep();
       router.go("home");
+    });
+  });
+
+  // reset -> clear and show presets again
+  root.querySelectorAll("[data-reset]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      clearStep();
+      router.go("moveforward");
     });
   });
 };
