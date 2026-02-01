@@ -16,7 +16,7 @@ export function screenStopUrge() {
             <div class="tileBody">
               <ol class="liteList">
                 <li>Put the trigger out of reach.</li>
-                <li>Water. Breath. Stand up.</li>
+                <li>Water. Breathe. Stand up.</li>
                 <li>Return in 10 minutes.</li>
               </ol>
             </div>
@@ -39,12 +39,14 @@ export function screenStopUrge() {
           <span class="tileDot dotBlue" aria-hidden="true"></span>
         </div>
 
-        <div class="muted" style="font-weight:700; opacity:.8; margin:16px 0 8px;">Next</div>
+        <div class="muted" style="font-weight:700; opacity:.8; margin:16px 0 8px;">
+          Next
+        </div>
 
-        <button class="tile" data-next="moveforward" type="button">
+        <button class="tile" data-go="moveforward" type="button">
           <div class="tileMain">
-            <div class="tileTitle">Next</div>
-            <div class="tileSub">Move Forward</div>
+            <div class="tileTitle">Move Forward</div>
+            <div class="tileSub">One small step.</div>
             <div class="tileHint">Tap</div>
           </div>
           <span class="tileDot dotGreen" aria-hidden="true"></span>
@@ -66,10 +68,8 @@ export function screenStopUrge() {
 window.__LITE_HOOKS = window.__LITE_HOOKS || {};
 window.__LITE_HOOKS.stopurge = (root, router) => {
   root.querySelectorAll("[data-go]").forEach((btn) => {
-    btn.addEventListener("click", () => router.go(btn.getAttribute("data-go")));
-  });
-
-  root.querySelectorAll("[data-next]").forEach((btn) => {
-    btn.addEventListener("click", () => router.go(btn.getAttribute("data-next")));
+    btn.addEventListener("click", () =>
+      router.go(btn.getAttribute("data-go"))
+    );
   });
 };
