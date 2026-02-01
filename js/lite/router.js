@@ -26,7 +26,16 @@ export const router = (() => {
 
   function go(route) {
     const r = clean(route);
-    window.location.hash = `#${r}`;
+    const target = `#${r}`;
+
+    // If already on this route, force a rerender anyway.
+    // (Hashchange won't fire when setting the same hash.)
+    if (window.location.hash === target) {
+      try { onRoute?.(r); } catch (e) { console.warn(e); }
+      return;
+    }
+
+    window.location.hash = target;
   }
 
   function handle() {
