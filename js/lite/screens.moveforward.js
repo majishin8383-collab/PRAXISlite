@@ -49,16 +49,7 @@ export function screenMoveForward() {
         <button class="tile" data-go="home" type="button">
           <div class="tileMain">
             <div class="tileTitle">Done</div>
-            <div class="tileSub">Return to start.</div>
-            <div class="tileHint">Tap</div>
-          </div>
-          <span class="tileDot dotBlue" aria-hidden="true"></span>
-        </button>
-
-        <button class="tile" data-go="home" type="button">
-          <div class="tileMain">
-            <div class="tileTitle">Back</div>
-            <div class="tileSub">Return to start.</div>
+            <div class="tileSub">You can stop here.</div>
             <div class="tileHint">Tap</div>
           </div>
           <span class="tileDot dotBlue" aria-hidden="true"></span>
@@ -71,11 +62,10 @@ export function screenMoveForward() {
 window.__LITE_HOOKS = window.__LITE_HOOKS || {};
 window.__LITE_HOOKS.moveforward = (root, router) => {
   function saveStep(text) {
-    const stamp = new Date().toISOString();
     try {
       localStorage.setItem(
         "praxis_lite_last_step",
-        JSON.stringify({ text, stamp })
+        JSON.stringify({ text, stamp: new Date().toISOString() })
       );
     } catch {}
   }
