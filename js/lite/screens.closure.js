@@ -14,6 +14,13 @@ function safeParse(json, fallback) {
   try { return JSON.parse(json); } catch { return fallback; }
 }
 
+function dotForState(state) {
+  const s = String(state || "").toUpperCase();
+  if (s === "REST") return "dotBlue";
+  if (s === "RELIEF") return "dotYellow";
+  return "dotGreen"; // READINESS + default
+}
+
 export function screenClosure() {
   const data = safeParse(sessionStorage.getItem("praxis_lite_closure"), {
     flow: "lite",
@@ -21,16 +28,16 @@ export function screenClosure() {
     line: "Stop here."
   });
 
-  const flow = String(data.flow || "lite");
   const state = String(data.state || "REST");
   const line = String(data.line || "Stop here.");
 
-  const showMoveForward = state === "READINESS";
+  const showMoveForward = state.toUpperCase() === "READINESS";
+  const dot = dotForState(state);
 
   return `
     <section class="card">
-      <h2 class="h2">Closure</h2>
-      <p class="muted">Ended.</p>
+      <h2 class="h2">End</h2>
+      <p class="muted">Done.</p>
     </section>
 
     <section class="card" style="margin-top:14px;">
@@ -38,9 +45,8 @@ export function screenClosure() {
         <div class="tileMain">
           <div class="tileTitle">${escapeHtml(state)}</div>
           <div class="tileSub">${escapeHtml(line)}</div>
-          <div class="tileHint">${escapeHtml(flow)}</div>
         </div>
-        <span class="tileDot dotGreen" aria-hidden="true"></span>
+        <span class="tileDot ${dot}" aria-hidden="true"></span>
       </div>
 
       <div class="tileStack" style="margin-top:14px;">
