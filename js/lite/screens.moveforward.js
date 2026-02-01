@@ -46,22 +46,13 @@ export function screenMoveForward() {
       <div class="muted" style="font-weight:700; opacity:.8; margin:16px 0 8px;">End</div>
 
       <div class="tileStack">
-        <button class="tile" data-end="REST" data-line="Stop here." type="button">
+        <button class="tile" data-go="home" type="button">
           <div class="tileMain">
-            <div class="tileTitle">REST</div>
-            <div class="tileSub">Stop here.</div>
+            <div class="tileTitle">Done</div>
+            <div class="tileSub">Return to start.</div>
             <div class="tileHint">Tap</div>
           </div>
           <span class="tileDot dotBlue" aria-hidden="true"></span>
-        </button>
-
-        <button class="tile" data-end="READINESS" data-line="One step is available." type="button">
-          <div class="tileMain">
-            <div class="tileTitle">READINESS</div>
-            <div class="tileSub">One step is available.</div>
-            <div class="tileHint">Tap</div>
-          </div>
-          <span class="tileDot dotGreen" aria-hidden="true"></span>
         </button>
 
         <button class="tile" data-go="home" type="button">
@@ -79,14 +70,14 @@ export function screenMoveForward() {
 
 window.__LITE_HOOKS = window.__LITE_HOOKS || {};
 window.__LITE_HOOKS.moveforward = (root, router) => {
-  function end(flow, state, line) {
+  function saveStep(text) {
+    const stamp = new Date().toISOString();
     try {
-      sessionStorage.setItem(
-        "praxis_lite_closure",
-        JSON.stringify({ flow, state, line, stamp: new Date().toISOString() })
+      localStorage.setItem(
+        "praxis_lite_last_step",
+        JSON.stringify({ text, stamp })
       );
     } catch {}
-    router.go("closure");
   }
 
   root.querySelectorAll("[data-go]").forEach((btn) => {
@@ -96,14 +87,8 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
   root.querySelectorAll("[data-preset]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const action = btn.getAttribute("data-preset") || "One small step.";
-      // preset tap = READINESS with the chosen step as the closure line
-      end("moveforward", "READINESS", action);
-    });
-  });
-
-  root.querySelectorAll("[data-end]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      end("moveforward", btn.getAttribute("data-end"), btn.getAttribute("data-line") || "Stop here.");
+      saveStep(action);
+      router.go("home");
     });
   });
 };
