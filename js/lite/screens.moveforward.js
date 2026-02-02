@@ -15,6 +15,7 @@ function safeParse(json, fallback) {
 }
 
 const KEY_LAST_STEP = "praxis_lite_last_step";
+const KEY_END_FLAG  = "praxis_lite_end_flag";
 
 const PRESETS = [
   "Drink water",
@@ -27,8 +28,30 @@ const PRESETS = [
 ];
 
 export function screenMoveForward() {
+  const endFlag = safeParse(sessionStorage.getItem(KEY_END_FLAG), null);
   const last = safeParse(localStorage.getItem(KEY_LAST_STEP), null);
   const lastText = last && typeof last.text === "string" ? last.text : "";
+
+  // TRUE END SCREEN (briefly shown after Done)
+  if (endFlag && endFlag.active) {
+    return `
+      <section class="card">
+        <h2 class="h2">End</h2>
+        <p class="muted">You can stop here.</p>
+      </section>
+
+      <section class="card" style="margin-top:14px;">
+        <div class="tile tileStatic">
+          <div class="tileMain">
+            <div class="tileTitle">Ended.</div>
+            <div class="tileSub">${lastText ? escapeHtml(lastText) : "Done."}</div>
+            <div class="tileHint">Returning to start…</div>
+          </div>
+          <span class="tileDot dotBlue" aria-hidden="true"></span>
+        </div>
+      </section>
+    `;
+  }
 
   // END STATE: show the action they chose + a real "Done" ending
   if (lastText) {
@@ -125,6 +148,15 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
     try { localStorage.removeItem(KEY_LAST_STEP); } catch {}
   }
 
+  function setEndFlag(active) {
+    try {
+      sessionStorage.setItem(
+        KEY_END_FLAG,
+        JSON.stringify({ active: !!active, stamp: new Date().toISOString() })
+      );
+    } catch {}
+  }
+
   // IMPORTANT: re-render this screen IN PLACE (router won't refresh same route)
   function rerenderSelf() {
     root.innerHTML = screenMoveForward();
@@ -145,11 +177,17 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
     });
   });
 
-  // done -> clear + go home
+  // done -> show TRUE END briefly, then go home
   root.querySelectorAll("[data-done]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      clearStep();
-      router.go("home");
+      setEndFlag(true);
+      rerenderSelf();
+
+      setTimeout(() => {
+        setEndFlag(false);
+        clearStep();
+        router.go("home");
+      }, 900);
     });
   });
 
