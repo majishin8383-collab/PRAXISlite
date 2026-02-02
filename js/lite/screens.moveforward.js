@@ -187,4 +187,4 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
       rerenderSelf();
     });
   });
-};.
+};
