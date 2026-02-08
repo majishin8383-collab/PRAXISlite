@@ -1,5 +1,5 @@
-// sw.js — Praxis Lite (minimal + safe)
-const CACHE = "praxis-lite-v2"; // bump when you change assets
+// sw.js — Praxis Lite (minimal + safe) — v2
+const CACHE = "praxis-lite-v2";
 
 const ASSETS = [
   "./",
@@ -26,41 +26,35 @@ const ASSETS = [
   "./icons/icon-512.png"
 ];
 
-// Allow the page to force-activate the new SW immediately
+// Allow page to force-activate an updated SW
 self.addEventListener("message", (event) => {
-  if (event?.data?.type === "SKIP_WAITING") {
-    try { self.skipWaiting(); } catch {}
-  }
+  if (event?.data?.type === "SKIP_WAITING") self.skipWaiting();
 });
 
 self.addEventListener("install", (event) => {
-  event.waitUntil((async () => {
-    const cache = await caches.open(CACHE);
-
-    // IMPORTANT: don't fail install if one asset 404s
-    await Promise.allSettled(
-      ASSETS.map((url) => cache.add(url))
-    );
-
-    self.skipWaiting();
-  })());
+  event.waitUntil(
+    caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(keys.map((k) => (k === CACHE ? null : caches.delete(k))));
-    self.clients.claim();
-  })());
+  event.waitUntil(
+    caches.keys()
+      .then((keys) => Promise.all(keys.map((k) => (k === CACHE ? null : caches.delete(k)))))
+      .then(() => self.clients.claim())
+  );
 });
 
-// Network-first for navigations; cache-first for assets
+// Network-first for navigations; cache-first for assets (query-safe)
 self.addEventListener("fetch", (event) => {
   const req = event.request;
   const url = new URL(req.url);
-  if (url.origin !== location.origin) return;
 
-  const isNav = req.mode === "navigate" || (req.headers.get("accept") || "").includes("text/html");
+  if (url.origin !== self.location.origin) return;
+  if (req.method !== "GET") return;
+
+  const accept = req.headers.get("accept") || "";
+  const isNav = req.mode === "navigate" || accept.includes("text/html");
 
   if (isNav) {
     event.respondWith(
@@ -70,10 +64,26 @@ self.addEventListener("fetch", (event) => {
           caches.open(CACHE).then((c) => c.put("./index.html", copy));
           return res;
         })
-        .catch(() => caches.match("./index.html"))
+        .catch(() => caches.match("./index.html", { ignoreSearch: true }))
     );
     return;
   }
 
-  event.respondWith(caches.match(req).then((cached) => cached || fetch(req)));
+  event.respondWith(
+    caches.match(req, { ignoreSearch: true })
+      .then((cached) => {
+        if (cached) return cached;
+
+        return fetch(req)
+          .then((res) => {
+            // Cache successful same-origin responses
+            if (res && res.ok) {
+              const copy = res.clone();
+              caches.open(CACHE).then((c) => c.put(req, copy));
+            }
+            return res;
+          })
+          .catch(() => cached || new Response("", { status: 504, statusText: "Offline" }));
+      })
+  );
 });
