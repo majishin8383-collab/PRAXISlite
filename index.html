@@ -38,7 +38,7 @@
       <section class="card">
         <h2 class="h2">Loading…</h2>
         <p class="muted">If this stays, Lite JS is not loading.</p>
-        <p class="muted" style="opacity:.7;">build lite-base-1</p>
+        <p class="muted" style="opacity:.7;">build lite-pwa-1</p>
       </section>
     </main>
 
@@ -63,7 +63,7 @@
         el.innerHTML = `<section class="card">
           <h2 class="h2">Lite failed to load</h2>
           <p class="muted" style="white-space:pre-wrap;">${esc(msg)}</p>
-          <p class="muted" style="opacity:.7;">build lite-base-1</p>
+          <p class="muted" style="opacity:.7;">build lite-pwa-1</p>
         </section>`;
       }
       window.addEventListener("error", (e) => show(e?.message || e?.error || "Unknown error"));
@@ -71,7 +71,16 @@
     })();
   </script>
 
-  <!-- Praxis Lite boot -->
-  <script type="module" src="./js/lite/app.js?v=lite-base-1"></script>
+  <!-- Register service worker (PWA) -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(() => {});
+      });
+    }
+  </script>
+
+  <!-- Praxis Lite boot (no cache-buster; SW cache handles versions) -->
+  <script type="module" src="./js/lite/app.js"></script>
 </body>
 </html>
