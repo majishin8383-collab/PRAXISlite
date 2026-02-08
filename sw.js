@@ -77,4 +77,3 @@ self.addEventListener("fetch", (event) => {
 
   event.respondWith(caches.match(req).then((cached) => cached || fetch(req)));
 });
-.
