@@ -1,5 +1,5 @@
 // sw.js — Praxis Lite (minimal + safe)
-const CACHE = "praxis-lite-v1";
+const CACHE = "praxis-lite-v2"; // bump when you change assets
 
 const ASSETS = [
   "./",
@@ -26,23 +26,32 @@ const ASSETS = [
   "./icons/icon-512.png"
 ];
 
-// Allow the page to tell the SW to activate immediately
+// Allow the page to force-activate the new SW immediately
 self.addEventListener("message", (event) => {
-  if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting();
+  if (event?.data?.type === "SKIP_WAITING") {
+    try { self.skipWaiting(); } catch {}
+  }
 });
 
 self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())
-  );
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE);
+
+    // IMPORTANT: don't fail install if one asset 404s
+    await Promise.allSettled(
+      ASSETS.map((url) => cache.add(url))
+    );
+
+    self.skipWaiting();
+  })());
 });
 
 self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.map((k) => (k === CACHE ? null : caches.delete(k))))
-    ).then(() => self.clients.claim())
-  );
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.map((k) => (k === CACHE ? null : caches.delete(k))));
+    self.clients.claim();
+  })());
 });
 
 // Network-first for navigations; cache-first for assets
