@@ -185,7 +185,7 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
           "praxis_lite_closure",
           JSON.stringify({
             flow: "moveforward",
-            state: "That’s enough.",
+            state: "DONE",
             line: lastText,
             stamp: new Date().toISOString()
           })
