@@ -165,18 +165,27 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
     });
   });
 
-  // done -> FORCE show End UI immediately (no storage dependency), then go home
+  // done -> go to Closure and STAY (no auto-return)
   root.querySelectorAll("[data-done]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const last = safeParse(localStorage.getItem(KEY_LAST_STEP), null);
-      const lastText = last && typeof last.text === "string" ? last.text : "";
+      const lastText = last && typeof last.text === "string" ? last.text : "Done.";
 
-      root.innerHTML = renderEndHtml(lastText);
+      // write closure payload for the shared closure screen
+      try {
+        sessionStorage.setItem(
+          "praxis_lite_closure",
+          JSON.stringify({
+            flow: "moveforward",
+            state: "DONE",
+            line: lastText,
+            stamp: new Date().toISOString()
+          })
+        );
+      } catch {}
 
-      setTimeout(() => {
-        clearStep();
-        router.go("home");
-      }, 900);
+      clearStep();
+      router.go("closure");
     });
   });
 
