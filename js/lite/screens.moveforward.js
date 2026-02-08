@@ -36,7 +36,7 @@ function renderEndHtml(lastText) {
     <section class="card" style="margin-top:14px;">
       <div class="tile tileStatic">
         <div class="tileMain">
-          <div class="tileTitle">Ended.</div>
+          <div class="tileTitle">That’s enough.</div>
           <div class="tileSub">${lastText ? escapeHtml(lastText) : "Done."}</div>
           <div class="tileHint">Returning to start…</div>
         </div>
@@ -50,7 +50,7 @@ export function screenMoveForward() {
   const last = safeParse(localStorage.getItem(KEY_LAST_STEP), null);
   const lastText = last && typeof last.text === "string" ? last.text : "";
 
-  // END STATE: show the action they chose + a real "Done" ending
+  // END STATE: show the action they chose + real end choices
   if (lastText) {
     return `
       <section class="card">
@@ -74,10 +74,19 @@ export function screenMoveForward() {
           <button class="tile" data-done="1" type="button">
             <div class="tileMain">
               <div class="tileTitle">Done</div>
-              <div class="tileSub">You can stop here.</div>
+              <div class="tileSub">Back to start.</div>
               <div class="tileHint">Tap</div>
             </div>
             <span class="tileDot dotBlue" aria-hidden="true"></span>
+          </button>
+
+          <button class="tile" data-runagain="1" type="button">
+            <div class="tileMain">
+              <div class="tileTitle">Run Again</div>
+              <div class="tileSub">${escapeHtml(lastText)}</div>
+              <div class="tileHint">Tap</div>
+            </div>
+            <span class="tileDot dotGreen" aria-hidden="true"></span>
           </button>
 
           <button class="tile" data-reset="1" type="button">
@@ -171,13 +180,12 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
       const last = safeParse(localStorage.getItem(KEY_LAST_STEP), null);
       const lastText = last && typeof last.text === "string" ? last.text : "Done.";
 
-      // write closure payload for the shared closure screen
       try {
         sessionStorage.setItem(
           "praxis_lite_closure",
           JSON.stringify({
             flow: "moveforward",
-            state: "DONE",
+            state: "That’s enough.",
             line: lastText,
             stamp: new Date().toISOString()
           })
@@ -186,6 +194,14 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
 
       clearStep();
       router.go("closure");
+    });
+  });
+
+  // run again -> keep same step, just reaffirm the screen (no preset list)
+  root.querySelectorAll("[data-runagain]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      // We intentionally keep KEY_LAST_STEP so the "Your step" state stays.
+      rerenderSelf();
     });
   });
 
