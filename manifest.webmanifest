@@ -1,8 +1,9 @@
 {
+  "id": "./",
   "name": "Praxis Lite",
   "short_name": "Praxis Lite",
   "description": "A minimal emotional regulation tool: Stabilize → Stop the Urge → Move Forward.",
-  "start_url": "./?source=pwa",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0b0f14",
