@@ -12,6 +12,13 @@
   <!-- PWA -->
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#0b0f14">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Icons -->
+  <link rel="icon" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
 
   <!-- Styles -->
   <link rel="stylesheet" href="./styles/base.css">
@@ -73,14 +80,37 @@
 
   <!-- Register service worker (PWA) -->
   <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(() => {});
+    (function () {
+      if (!("serviceWorker" in navigator)) return;
+
+      window.addEventListener("load", async () => {
+        try {
+          const reg = await navigator.serviceWorker.register("./sw.js", { scope: "./" });
+
+          // Ask the browser to check for an updated sw.js (helps on GitHub Pages caching)
+          try { await reg.update(); } catch {}
+
+          // If a new SW is waiting, activate it ASAP and refresh once.
+          if (reg.waiting) {
+            reg.waiting.postMessage({ type: "SKIP_WAITING" });
+          }
+
+          reg.addEventListener("updatefound", () => {
+            const sw = reg.installing;
+            if (!sw) return;
+            sw.addEventListener("statechange", () => {
+              if (sw.state === "installed" && navigator.serviceWorker.controller) {
+                // New version installed; reload once to ensure fresh JS/modules.
+                location.reload();
+              }
+            });
+          });
+        } catch {}
       });
-    }
+    })();
   </script>
 
-  <!-- Praxis Lite boot (no cache-buster; SW cache handles versions) -->
-  <script type="module" src="./js/lite/app.js"></script>
+  <!-- Praxis Lite boot (deterministic cache-buster) -->
+  <script type="module" src="./js/lite/app.js?v=lite-pwa-1"></script>
 </body>
 </html>
