@@ -6,7 +6,6 @@
   <title>Praxis Lite</title>
   <meta name="description" content="Praxis Lite — a self-guided emotional regulation tool (Stabilize → Stop the Urge → Move Forward → Emergency)." />
 
-  <!-- GitHub Pages base-path safe -->
   <base href="./" />
 
   <!-- PWA -->
@@ -51,76 +50,18 @@
 
     <footer class="footer">
       <div>
-        <strong>© 2026 Joseph Satmary.</strong> All rights reserved.
+        <strong>© 2026 Joseph Satmary.</strong>
         <span class="beta">Lite — focused, minimal, and intentionally simple.</span>
       </div>
       <div>
+        <a href="./about.html">About</a>
+        &nbsp;·&nbsp;
         <a href="./legal.html">Legal</a>
       </div>
     </footer>
   </div>
 
-  <!-- On-page error capture -->
-  <script>
-    (function () {
-      const m = () => document.getElementById("main");
-      function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]))}
-      function show(msg){
-        const el = m(); if(!el) return;
-        el.innerHTML = `<section class="card">
-          <h2 class="h2">Lite failed to load</h2>
-          <p class="muted" style="white-space:pre-wrap;">${esc(msg)}</p>
-          <p class="muted" style="opacity:.7;">build lite-pwa-1</p>
-        </section>`;
-      }
-      window.addEventListener("error", (e) => show(e?.message || e?.error || "Unknown error"));
-      window.addEventListener("unhandledrejection", (e) => show(e?.reason || "Unhandled rejection"));
-    })();
-  </script>
-
-  <!-- Register service worker (PWA) + UPDATE NOW handshake -->
-  <script>
-    (function () {
-      if (!("serviceWorker" in navigator)) return;
-
-      window.addEventListener("load", async () => {
-        try {
-          const reg = await navigator.serviceWorker.register("./sw.js", { scope: "./" });
-
-          // Ask the browser to check for an updated sw.js (helps on GitHub Pages caching)
-          try { await reg.update(); } catch {}
-
-          // If a new SW is already waiting, activate it immediately
-          if (reg.waiting) {
-            try { reg.waiting.postMessage({ type: "SKIP_WAITING" }); } catch {}
-          }
-
-          // If an update is found, activate it when it's installed
-          reg.addEventListener("updatefound", () => {
-            const sw = reg.installing;
-            if (!sw) return;
-
-            sw.addEventListener("statechange", () => {
-              if (sw.state === "installed" && navigator.serviceWorker.controller) {
-                // New version is ready -> tell it to take over now
-                try { reg.waiting && reg.waiting.postMessage({ type: "SKIP_WAITING" }); } catch {}
-              }
-            });
-          });
-
-          // When the new SW takes control, reload ONCE so modules/assets come from the new cache
-          let refreshing = false;
-          navigator.serviceWorker.addEventListener("controllerchange", () => {
-            if (refreshing) return;
-            refreshing = true;
-            location.reload();
-          });
-        } catch {}
-      });
-    })();
-  </script>
-
-  <!-- Praxis Lite boot (deterministic cache-buster) -->
+  <!-- Praxis Lite boot -->
   <script type="module" src="./js/lite/app.js?v=lite-pwa-1"></script>
 </body>
 </html>
