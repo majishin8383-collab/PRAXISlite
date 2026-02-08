@@ -26,31 +26,11 @@ const PRESETS = [
   "Smallest part only",
 ];
 
-function renderEndHtml(lastText) {
-  return `
-    <section class="card">
-      <h2 class="h2">End</h2>
-      <p class="muted">You can stop here.</p>
-    </section>
-
-    <section class="card" style="margin-top:14px;">
-      <div class="tile tileStatic">
-        <div class="tileMain">
-          <div class="tileTitle">That’s enough.</div>
-          <div class="tileSub">${lastText ? escapeHtml(lastText) : "Done."}</div>
-          <div class="tileHint">Returning to start…</div>
-        </div>
-        <span class="tileDot dotBlue" aria-hidden="true"></span>
-      </div>
-    </section>
-  `;
-}
-
 export function screenMoveForward() {
   const last = safeParse(localStorage.getItem(KEY_LAST_STEP), null);
   const lastText = last && typeof last.text === "string" ? last.text : "";
 
-  // END STATE: show the action they chose + real end choices
+  // END STATE: step chosen
   if (lastText) {
     return `
       <section class="card">
@@ -78,15 +58,6 @@ export function screenMoveForward() {
               <div class="tileHint">Tap</div>
             </div>
             <span class="tileDot dotBlue" aria-hidden="true"></span>
-          </button>
-
-          <button class="tile" data-runagain="1" type="button">
-            <div class="tileMain">
-              <div class="tileTitle">Run Again</div>
-              <div class="tileSub">${escapeHtml(lastText)}</div>
-              <div class="tileHint">Tap</div>
-            </div>
-            <span class="tileDot dotGreen" aria-hidden="true"></span>
           </button>
 
           <button class="tile" data-reset="1" type="button">
@@ -154,7 +125,6 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
     try { localStorage.removeItem(KEY_LAST_STEP); } catch {}
   }
 
-  // IMPORTANT: re-render this screen IN PLACE (router won't refresh same route)
   function rerenderSelf() {
     root.innerHTML = screenMoveForward();
     window.__LITE_HOOKS.moveforward(root, router);
@@ -162,10 +132,12 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
 
   // nav
   root.querySelectorAll("[data-go]").forEach((btn) => {
-    btn.addEventListener("click", () => router.go(btn.getAttribute("data-go")));
+    btn.addEventListener("click", () =>
+      router.go(btn.getAttribute("data-go"))
+    );
   });
 
-  // preset tap -> save + show end-state on THIS screen
+  // preset -> save + end-state
   root.querySelectorAll("[data-preset]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const action = btn.getAttribute("data-preset") || "One small step.";
@@ -174,7 +146,7 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
     });
   });
 
-  // done -> go to Closure and STAY (no auto-return)
+  // done -> closure
   root.querySelectorAll("[data-done]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const last = safeParse(localStorage.getItem(KEY_LAST_STEP), null);
@@ -197,15 +169,7 @@ window.__LITE_HOOKS.moveforward = (root, router) => {
     });
   });
 
-  // run again -> keep same step, just reaffirm the screen (no preset list)
-  root.querySelectorAll("[data-runagain]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      // We intentionally keep KEY_LAST_STEP so the "Your step" state stays.
-      rerenderSelf();
-    });
-  });
-
-  // reset -> clear + show presets again
+  // pick different step
   root.querySelectorAll("[data-reset]").forEach((btn) => {
     btn.addEventListener("click", () => {
       clearStep();
