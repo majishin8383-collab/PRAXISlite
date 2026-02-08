@@ -78,7 +78,7 @@
     })();
   </script>
 
-  <!-- Register service worker (PWA) -->
+  <!-- Register service worker (PWA) + UPDATE NOW handshake -->
   <script>
     (function () {
       if (!("serviceWorker" in navigator)) return;
@@ -90,20 +90,30 @@
           // Ask the browser to check for an updated sw.js (helps on GitHub Pages caching)
           try { await reg.update(); } catch {}
 
-          // If a new SW is waiting, activate it ASAP and refresh once.
+          // If a new SW is already waiting, activate it immediately
           if (reg.waiting) {
-            reg.waiting.postMessage({ type: "SKIP_WAITING" });
+            try { reg.waiting.postMessage({ type: "SKIP_WAITING" }); } catch {}
           }
 
+          // If an update is found, activate it when it's installed
           reg.addEventListener("updatefound", () => {
             const sw = reg.installing;
             if (!sw) return;
+
             sw.addEventListener("statechange", () => {
               if (sw.state === "installed" && navigator.serviceWorker.controller) {
-                // New version installed; reload once to ensure fresh JS/modules.
-                location.reload();
+                // New version is ready -> tell it to take over now
+                try { reg.waiting && reg.waiting.postMessage({ type: "SKIP_WAITING" }); } catch {}
               }
             });
+          });
+
+          // When the new SW takes control, reload ONCE so modules/assets come from the new cache
+          let refreshing = false;
+          navigator.serviceWorker.addEventListener("controllerchange", () => {
+            if (refreshing) return;
+            refreshing = true;
+            location.reload();
           });
         } catch {}
       });
@@ -114,3 +124,4 @@
   <script type="module" src="./js/lite/app.js?v=lite-pwa-1"></script>
 </body>
 </html>
+```0
