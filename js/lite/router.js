@@ -14,14 +14,32 @@ export const router = (() => {
     "closure",
   ]);
 
+  function normalize(raw) {
+    let r = String(raw || "").trim().toLowerCase();
+
+    // remove querystring if any
+    const q = r.indexOf("?");
+    if (q !== -1) r = r.slice(0, q);
+
+    // remove leading slashes (handles "#/closure")
+    while (r.startsWith("/")) r = r.slice(1);
+
+    // remove trailing slashes
+    while (r.endsWith("/")) r = r.slice(0, -1);
+
+    return r;
+  }
+
   function clean(route) {
-    const r = String(route || "").toLowerCase().trim();
+    const r = normalize(route);
     return ALLOWED.has(r) ? r : defaultRoute;
   }
 
   function current() {
     const hash = window.location.hash || "";
-    return clean(hash.replace("#", ""));
+    // hash is "#something" or "#/something"
+    const raw = hash.startsWith("#") ? hash.slice(1) : hash;
+    return clean(raw);
   }
 
   function go(route) {
@@ -29,7 +47,6 @@ export const router = (() => {
     const target = `#${r}`;
 
     // If already on this route, force a rerender anyway.
-    // (Hashchange won't fire when setting the same hash.)
     if (window.location.hash === target) {
       try { onRoute?.(r); } catch (e) { console.warn(e); }
       return;
