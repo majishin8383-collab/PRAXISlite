@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.jdesigns.praxislite",
+        "sha256_cert_fingerprints": ["2E:D5:B1:EA:BC:4E:C9:95:F7:BF:05:97:D0:A8:CB:21:FB:41:65:58:7A:A4:01:A3:36:04:F9:B1:96:F7:F4:F5"]
+      }
+    }]
